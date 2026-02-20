@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ネイルサロン管理画面 - 予約・メニュー・顧客管理">
+    <title>管理画面 - Beauty Reserve</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+    <script src="admin.js" defer></script>
+</head>
+
+<body>
+    <!-- SVG Icon Definitions -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+        <symbol id="icon-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+        </symbol>
+        <symbol id="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+        </symbol>
+        <symbol id="icon-nail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2v6m6-6v6M5 10h14a2 2 0 0 1 2 2v2a8 8 0 0 1-8 8h-2a8 8 0 0 1-8-8v-2a2 2 0 0 1 2-2z" />
+        </symbol>
+        <symbol id="icon-yen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22V12M5 3l7 9 7-9M5 12h14M5 16h14" />
+        </symbol>
+        <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </symbol>
+        <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+        </symbol>
+        <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </symbol>
+        <symbol id="icon-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+        </symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+        </symbol>
+        <symbol id="icon-bar-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="20" x2="12" y2="10" />
+            <line x1="18" y1="20" x2="18" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="16" />
+        </symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+        </symbol>
+    </svg>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1 class="sidebar-logo">Beauty Reserve</h1>
+            <span class="sidebar-subtitle">管理画面</span>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-page="dashboard">
+                <svg class="nav-icon">
+                    <use href="#icon-dashboard" />
+                </svg>
+                <span class="nav-label">ダッシュボード</span>
+            </button>
+            <button class="nav-item" data-page="reservations">
+                <svg class="nav-icon">
+                    <use href="#icon-calendar" />
+                </svg>
+                <span class="nav-label">予約管理</span>
+            </button>
+            <button class="nav-item" data-page="menus">
+                <svg class="nav-icon">
+                    <use href="#icon-nail" />
+                </svg>
+                <span class="nav-label">メニュー管理</span>
+            </button>
+            <button class="nav-item" data-page="sales">
+                <svg class="nav-icon">
+                    <use href="#icon-yen" />
+                </svg>
+                <span class="nav-label">売上管理</span>
+            </button>
+            <button class="nav-item" data-page="customers">
+                <svg class="nav-icon">
+                    <use href="#icon-users" />
+                </svg>
+                <span class="nav-label">顧客一覧</span>
+            </button>
+            <button class="nav-item" data-page="settings">
+                <svg class="nav-icon">
+                    <use href="#icon-settings" />
+                </svg>
+                <span class="nav-label">営業設定</span>
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item nav-link-external">
+                <svg class="nav-icon">
+                    <use href="#icon-external" />
+                </svg>
+                <span class="nav-label">お客様用サイトへ</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="mobile-header" id="mobile-header">
+        <button class="hamburger" id="btn-hamburger">
+            <svg width="24" height="24">
+                <use href="#icon-menu" />
+            </svg>
+        </button>
+        <h1 class="mobile-title">Beauty Reserve 管理</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-area" id="main-area">
+
+        <!-- ============ DASHBOARD ============ -->
+        <section class="page active" id="page-dashboard">
+            <div class="page-header">
+                <h2>ダッシュボード</h2>
+                <span class="page-date" id="dashboard-date"></span>
+            </div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card kpi-today">
+                    <div class="kpi-icon-wrap">
+                        <svg class="kpi-svg">
+                            <use href="#icon-calendar" />
+                        </svg>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="kpi-today-count">0</span>
+                        <span class="kpi-label">今日の予約</span>
+                    </div>
+                </div>
+                <div class="kpi-card kpi-revenue">
+                    <div class="kpi-icon-wrap">
+                        <svg class="kpi-svg">
+                            <use href="#icon-yen" />
+                        </svg>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="kpi-today-revenue">¥0</span>
+                        <span class="kpi-label">今日の売上見込</span>
+                    </div>
+                </div>
+                <div class="kpi-card kpi-completed">
+                    <div class="kpi-icon-wrap">
+                        <svg class="kpi-svg">
+                            <use href="#icon-check" />
+                        </svg>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="kpi-completed">0</span>
+                        <span class="kpi-label">来店完了（今月）</span>
+                    </div>
+                </div>
+                <div class="kpi-card kpi-total">
+                    <div class="kpi-icon-wrap">
+                        <svg class="kpi-svg">
+                            <use href="#icon-users" />
+                        </svg>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="kpi-total-customers">0</span>
+                        <span class="kpi-label">総顧客数</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <h3>直近の予約</h3>
+                <div class="table-wrap">
+                    <table class="data-table" id="dashboard-upcoming-table">
+                        <thead>
+                            <tr>
+                                <th>日時</th>
+                                <th>お客様名</th>
+                                <th>メニュー</th>
+                                <th>ステータス</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-upcoming-body"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="dashboard-empty" style="display:none">直近の予約はありません</p>
+            </div>
+        </section>
+
+        <!-- ============ RESERVATIONS ============ -->
+        <section class="page" id="page-reservations">
+            <div class="page-header">
+                <h2>予約管理</h2>
+            </div>
+
+            <div class="toolbar">
+                <input type="text" class="search-input" id="res-search" placeholder="氏名・電話番号・日付で検索">
+                <div class="filter-pills">
+                    <button class="pill active" data-filter="all">すべて</button>
+                    <button class="pill" data-filter="booked">予約済</button>
+                    <button class="pill" data-filter="completed">来店完了</button>
+                    <button class="pill" data-filter="canceled">キャンセル</button>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table class="data-table" id="res-table">
+                    <thead>
+                        <tr>
+                            <th>予約日時</th>
+                            <th>お客様名</th>
+                            <th>電話番号</th>
+                            <th>メニュー</th>
+                            <th>料金</th>
+                            <th>ステータス</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="res-body"></tbody>
+                </table>
+            </div>
+            <p class="empty-state" id="res-empty" style="display:none">予約が見つかりません</p>
+        </section>
+
+        <!-- ============ MENUS ============ -->
+        <section class="page" id="page-menus">
+            <div class="page-header">
+                <h2>メニュー管理</h2>
+                <button class="btn-action" id="btn-add-menu">+ メニュー追加</button>
+            </div>
+
+            <div class="menu-grid" id="menu-grid"></div>
+
+            <!-- Menu Edit Modal -->
+            <div class="modal-overlay hidden" id="menu-modal">
+                <div class="modal-box">
+                    <div class="modal-head">
+                        <h3 id="menu-modal-title">メニュー追加</h3>
+                        <button class="btn-close" id="btn-close-menu-modal">
+                            <svg width="20" height="20">
+                                <use href="#icon-close" />
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="menu-form">
+                        <div class="form-group">
+                            <label for="menu-name">メニュー名</label>
+                            <input type="text" id="menu-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="menu-desc">説明</label>
+                            <textarea id="menu-desc" rows="3"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="menu-price">料金（円）</label>
+                                <input type="number" id="menu-price" min="0" step="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="menu-duration">施術時間（分）</label>
+                                <input type="number" id="menu-duration" min="15" step="15" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label-inline">
+                                <input type="checkbox" id="menu-popular"> 人気メニューとして表示
+                            </label>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn-secondary" id="btn-cancel-menu">キャンセル</button>
+                            <button type="submit" class="btn-primary">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ SALES ============ -->
+        <section class="page" id="page-sales">
+            <div class="page-header">
+                <h2>売上管理</h2>
+            </div>
+
+            <div class="toolbar sales-toolbar">
+                <div class="sales-month-nav">
+                    <button class="btn-nav" id="sales-prev-month" title="前月">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+                    <select id="sales-month-select" class="sales-month-select"></select>
+                    <button class="btn-nav" id="sales-next-month" title="次月">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="filter-pills" id="sales-period-pills">
+                    <button class="pill active" data-period="daily">日毎</button>
+                    <button class="pill" data-period="weekly">週毎</button>
+                    <button class="pill" data-period="monthly">月毎</button>
+                </div>
+            </div>
+
+            <div class="kpi-grid kpi-grid-3">
+                <div class="kpi-card kpi-revenue">
+                    <div class="kpi-icon-wrap">
+                        <svg class="kpi-svg">
+                            <use href="#icon-yen" />
+                        </svg>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="sales-total-revenue">¥0</span>
+                        <span class="kpi-label">総売上</span>
+                    </div>
+                </div>
+                <div class="kpi-card kpi-completed">
+                    <div class="kpi-icon-wrap">
+                        <svg class="kpi-svg">
+                            <use href="#icon-user" />
+                        </svg>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="sales-total-customers">0</span>
+                        <span class="kpi-label">総来客数</span>
+                    </div>
+                </div>
+                <div class="kpi-card kpi-today">
+                    <div class="kpi-icon-wrap">
+                        <svg class="kpi-svg">
+                            <use href="#icon-bar-chart" />
+                        </svg>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="sales-avg-revenue">¥0</span>
+                        <span class="kpi-label">平均売上</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <h3 id="sales-table-title">日別売上</h3>
+                <div class="table-wrap">
+                    <table class="data-table" id="sales-table">
+                        <thead>
+                            <tr id="sales-thead-row">
+                                <th>期間</th>
+                                <th>来客数</th>
+                                <th>売上</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-body"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="sales-empty" style="display:none">売上データがありません</p>
+            </div>
+        </section>
+
+        <!-- ============ CUSTOMERS ============ -->
+        <section class="page" id="page-customers">
+            <div class="page-header">
+                <h2>顧客一覧</h2>
+            </div>
+
+            <div class="toolbar">
+                <input type="text" class="search-input" id="customer-search" placeholder="氏名・電話番号で検索">
+            </div>
+
+            <div class="table-wrap">
+                <table class="data-table" id="customer-table">
+                    <thead>
+                        <tr>
+                            <th>お客様名</th>
+                            <th>電話番号</th>
+                            <th>メール</th>
+                            <th>来店回数</th>
+                            <th>最終来店日</th>
+                            <th>合計金額</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customer-body"></tbody>
+                </table>
+            </div>
+            <p class="empty-state" id="customer-empty" style="display:none">顧客情報がありません</p>
+        </section>
+
+        <!-- ============ SETTINGS ============ -->
+        <section class="page" id="page-settings">
+            <div class="page-header">
+                <h2>営業設定</h2>
+            </div>
+
+            <div class="settings-card">
+                <h3>店舗情報</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="shop-name">店舗名</label>
+                        <input type="text" id="shop-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="shop-phone">電話番号</label>
+                        <input type="tel" id="shop-phone">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="shop-address">住所</label>
+                    <input type="text" id="shop-address">
+                </div>
+                <div class="form-group">
+                    <label for="shop-rules">キャンセルポリシー</label>
+                    <textarea id="shop-rules" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h3>営業時間</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="s-open">開店</label>
+                        <input type="time" id="s-open">
+                    </div>
+                    <div class="form-group">
+                        <label for="s-close">閉店</label>
+                        <input type="time" id="s-close">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>定休日</label>
+                    <div class="checkbox-row">
+                        <label class="cb"><input type="checkbox" name="s-holiday" value="0"> 日</label>
+                        <label class="cb"><input type="checkbox" name="s-holiday" value="1"> 月</label>
+                        <label class="cb"><input type="checkbox" name="s-holiday" value="2"> 火</label>
+                        <label class="cb"><input type="checkbox" name="s-holiday" value="3"> 水</label>
+                        <label class="cb"><input type="checkbox" name="s-holiday" value="4"> 木</label>
+                        <label class="cb"><input type="checkbox" name="s-holiday" value="5"> 金</label>
+                        <label class="cb"><input type="checkbox" name="s-holiday" value="6"> 土</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h3>予約設定</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="s-slot">予約枠の単位</label>
+                        <select id="s-slot">
+                            <option value="15">15分</option>
+                            <option value="30">30分</option>
+                            <option value="60">60分</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="s-max-days">最大予約可能日数</label>
+                        <input type="number" id="s-max-days" min="7" max="180">
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-primary btn-save-settings" id="btn-save-settings">設定を保存</button>
+        </section>
+    </main>
+
+    <!-- Reservation Detail Modal -->
+    <div class="modal-overlay hidden" id="res-modal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3>予約詳細</h3>
+                <button class="btn-close" id="btn-close-res-modal">
+                    <svg width="20" height="20">
+                        <use href="#icon-close" />
+                    </svg>
+                </button>
+            </div>
+            <div id="res-modal-body" class="modal-body-content"></div>
+            <div id="res-modal-actions" class="modal-actions"></div>
+        </div>
+    </div>
+</body>
+
+</html>

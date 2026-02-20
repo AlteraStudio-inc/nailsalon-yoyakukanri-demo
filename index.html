@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="ネイルサロン・美容室の予約管理アプリ。オンラインで簡単に予約できます。">
+    <title>Beauty Reserve - ネイルサロン予約</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+
+    <link rel="stylesheet" href="styles.css?v=3">
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <!-- Notification Permission Banner -->
+    <div id="notification-banner" class="notification-banner hidden">
+        <div class="notification-banner-inner">
+            <span class="notification-banner-icon">🔔</span>
+            <p>施術後の次回予約通知を受け取るには、通知を許可してください</p>
+            <button id="btn-allow-notification" class="btn-allow">許可する</button>
+            <button id="btn-dismiss-notification" class="btn-dismiss">あとで</button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container hidden"></div>
+
+    <!-- In-App Notification Bell -->
+    <div id="notification-bell" class="notification-bell hidden" title="通知があります">
+        <span class="bell-icon">🔔</span>
+        <span id="notification-badge" class="notification-badge hidden">0</span>
+    </div>
+    <div id="notification-panel" class="notification-panel hidden">
+        <div class="notification-panel-header">
+            <h3>通知</h3>
+            <button id="btn-close-notifications" class="btn-close-panel">✕</button>
+        </div>
+        <div id="notification-list" class="notification-list">
+            <p class="empty-notifications">通知はありません</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="header-logo" id="btn-home">
+                <h1 id="header-shop-name">Beauty Reserve</h1>
+            </div>
+            <button id="btn-mypage" class="btn-header-action">マイページ</button>
+        </div>
+    </header>
+
+    <!-- Step Bar -->
+    <div id="step-bar" class="step-bar hidden">
+        <div class="step-bar-inner">
+            <div class="step" data-step="menu"><span class="step-num">1</span><span class="step-label">メニュー</span></div>
+            <div class="step-line"></div>
+            <div class="step" data-step="datetime"><span class="step-num">2</span><span class="step-label">日時</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="info"><span class="step-num">3</span><span class="step-label">情報</span></div>
+            <div class="step-line"></div>
+            <div class="step" data-step="note"><span class="step-num">4</span><span class="step-label">備考</span></div>
+            <div class="step-line"></div>
+            <div class="step" data-step="confirm"><span class="step-num">5</span><span class="step-label">確認</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="done"><span class="step-num">6</span><span class="step-label">完了</span></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- TOP: Shop info + Menu list -->
+        <section id="screen-top" class="screen active">
+            <div class="shop-card">
+                <div class="shop-card-header">
+                    <h2 id="shop-name">サロン名</h2>
+                </div>
+                <div class="shop-card-body">
+                    <div class="shop-info-row"><span class="info-icon">📍</span><span id="shop-address">住所</span></div>
+                    <div class="shop-info-row"><span class="info-icon">📞</span><span id="shop-phone">電話番号</span></div>
+                    <div class="shop-info-row"><span class="info-icon">🕐</span><span id="shop-hours">営業時間</span></div>
+                    <div class="shop-info-row"><span class="info-icon">📅</span><span id="shop-holidays">定休日</span>
+                    </div>
+                    <div class="shop-info-row"><span class="info-icon">📝</span><span id="shop-rules">予約ルール</span></div>
+                </div>
+            </div>
+            <button type="button" id="btn-to-gallery" class="btn-secondary btn-full"
+                style="margin-bottom:20px;background:#FF6B81;color:#fff;border:none;font-weight:bold;width:100%;display:block;cursor:pointer;">💅
+                デザインから探す</button>
+            <h2 class="section-title">メニュー一覧</h2>
+            <div id="menu-list" class="menu-list"></div>
+        </section>
+
+        <!-- GALLERY -->
+        <section id="screen-gallery" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" id="btn-back-gallery">← TOPへ</button>
+                <h2>デザインギャラリー</h2>
+            </div>
+            <div class="gallery-grid" id="gallery-grid"></div>
+        </section>
+
+        <!-- DATETIME: Combined date + time (HPB-style weekly grid) -->
+        <section id="screen-datetime" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" id="btn-back-datetime">← 戻る</button>
+                <h2>日時を選択</h2>
+            </div>
+            <div id="selected-menu-summary" class="selected-summary"></div>
+            <div class="week-grid-container">
+                <div class="week-nav">
+                    <button id="btn-prev-week" class="btn-week-nav">◀ 前の一週間</button>
+                    <button id="btn-next-week" class="btn-week-nav">次の一週間 ▶</button>
+                </div>
+                <div class="week-grid-wrapper">
+                    <div id="week-grid" class="week-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INFO Input -->
+        <section id="screen-info" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" id="btn-back-info">← 戻る</button>
+                <h2>お客様情報</h2>
+            </div>
+            <form id="form-info" class="form-info" novalidate>
+                <!-- Name & Phone removed (linked to account) -->
+                <div class="form-group">
+                    <label for="input-email">メールアドレス <span class="optional">任意</span></label>
+                    <input type="email" id="input-email" placeholder="例：hanako@example.com" autocomplete="email">
+                    <span class="form-error" id="error-email"></span>
+                </div>
+                <div class="form-group">
+                    <label>性別 <span class="optional">任意</span></label>
+                    <div class="radio-group">
+                        <label class="radio-label"><input type="radio" name="gender" value="female"> 女性</label>
+                        <label class="radio-label"><input type="radio" name="gender" value="male"> 男性</label>
+                        <label class="radio-label"><input type="radio" name="gender" value="male"> 男性</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>ご来店 <span class="optional">任意</span></label>
+                    <div class="radio-group">
+                        <label class="radio-label"><input type="radio" name="visit-type" value="first"> 初めて</label>
+                        <label class="radio-label"><input type="radio" name="visit-type" value="repeat"> リピーター</label>
+                    </div>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="input-agree" required>
+                        <span>キャンセル規定に同意する <span class="required">必須</span></span>
+                    </label>
+                    <p class="cancel-policy">※ キャンセルの際は事前にご連絡ください。</p>
+                    <span class="form-error" id="error-agree"></span>
+                </div>
+                <button type="button" id="btn-info-next" class="btn-primary btn-full">次へ進む</button>
+            </form>
+        </section>
+
+        <!-- NOTE Input -->
+        <section id="screen-note" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" id="btn-back-note">← 戻る</button>
+                <h2>ご要望・備考</h2>
+            </div>
+            <div class="note-section">
+                <p class="note-hint">よくあるご要望（タップで追加）</p>
+                <div class="note-chips">
+                    <button class="chip" data-text="静かに過ごしたい">静かに過ごしたい</button>
+                    <button class="chip" data-text="デザイン相談したい">デザイン相談したい</button>
+                    <button class="chip" data-text="時間に余裕を持ちたい">時間に余裕を持ちたい</button>
+                    <button class="chip" data-text="アレルギーがあります">アレルギーがあります</button>
+                    <button class="chip" data-text="初めてなので丁寧にお願いします">初めてなので丁寧に</button>
+                    <button class="chip" data-text="駐車場を利用したい">駐車場を利用したい</button>
+                </div>
+                <div class="form-group">
+                    <label for="input-note">自由入力（最大1000文字）</label>
+                    <textarea id="input-note" maxlength="1000" rows="5" placeholder="その他のご要望があればご記入ください"></textarea>
+                    <span class="char-count"><span id="note-char-count">0</span>/1000</span>
+                </div>
+                <button type="button" id="btn-note-next" class="btn-primary btn-full">確認画面へ</button>
+            </div>
+        </section>
+
+        <!-- CONFIRM -->
+        <section id="screen-confirm" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" id="btn-back-confirm">← 戻る</button>
+                <h2>予約内容の確認</h2>
+            </div>
+            <div class="confirm-card">
+                <div class="confirm-section">
+                    <h3>📍 店舗</h3>
+                    <p id="confirm-shop"></p>
+                </div>
+                <div class="confirm-section">
+                    <h3>💅 メニュー</h3>
+                    <p id="confirm-menu"></p>
+                    <p id="confirm-duration-price" class="sub-info"></p>
+                </div>
+                <div class="confirm-section">
+                    <h3>📅 日時</h3>
+                    <p id="confirm-datetime"></p>
+                </div>
+                <div class="confirm-section">
+                    <h3>👤 お客様情報</h3>
+                    <p id="confirm-name"></p>
+                    <p id="confirm-phone"></p>
+                    <p id="confirm-email"></p>
+                    <p id="confirm-gender"></p>
+                    <p id="confirm-visit"></p>
+                </div>
+                <div class="confirm-section">
+                    <h3>📝 備考</h3>
+                    <p id="confirm-note"></p>
+                </div>
+            </div>
+            <button type="button" id="btn-confirm-submit" class="btn-primary btn-full btn-confirm">予約を確定する</button>
+        </section>
+
+        <!-- DONE -->
+        <section id="screen-done" class="screen">
+            <div class="done-container">
+                <div class="celebration-confetti"></div>
+                <div class="done-icon pop-animation">🎉</div>
+                <h2>予約が完了しました！</h2>
+                <p class="done-message">ご来店お待ちしております♪</p>
+                <div id="done-summary" class="done-summary"></div>
+                <button type="button" id="btn-download-ics" class="btn-secondary btn-full">📅 カレンダーに追加（.ics）</button>
+                <button type="button" id="btn-back-top" class="btn-primary btn-full">トップに戻る</button>
+            </div>
+        </section>
+
+        <!-- GALLERY -->
+        <section id="screen-gallery" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" id="btn-back-gallery">← トップへ</button>
+                <h2>デザインギャラリー</h2>
+            </div>
+            <div class="gallery-grid" id="gallery-grid"></div>
+        </section>
+
+        <!-- MYPAGE -->
+        <section id="screen-mypage" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" id="btn-back-mypage">← トップへ</button>
+                <h2>マイページ</h2>
+            </div>
+
+            <!-- Login Form (shown when not logged in) -->
+            <div id="mypage-login" class="mypage-login-card">
+                <h3>ログイン</h3>
+                <p class="login-desc">ご予約時に入力されたお名前と電話番号でログインできます。</p>
+                <div class="form-group">
+                    <label for="login-name">ログインID</label>
+                    <input type="text" id="login-name" placeholder="IDを入力" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-phone">電話番号 <span
+                            style="font-size:11px;color:#888;font-weight:normal">※ハイフン不要</span></label>
+                    <input type="tel" id="login-phone" placeholder="例：09012345678" autocomplete="tel">
+                </div>
+                <span class="form-error" id="error-login"></span>
+                <button type="button" id="btn-login" class="btn-primary btn-full">ログイン</button>
+            </div>
+
+            <!-- My Reservations (shown when logged in) -->
+            <div id="mypage-content" class="mypage-content hidden">
+                <div class="mypage-user-info">
+                    <span id="mypage-user-name" class="mypage-user-name"></span>
+                    <button id="btn-logout" class="btn-logout">ログアウト</button>
+                </div>
+                <h3 class="mypage-section-title">予約履歴</h3>
+                <div id="mypage-reservation-list" class="admin-reservation-list"></div>
+            </div>
+        </section>
+
+        <!-- ADMIN (hidden, accessed via hash #admin) -->
+        <section id="screen-admin" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" id="btn-back-admin">← トップへ</button>
+                <h2>予約管理（管理者）</h2>
+            </div>
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="reservations">予約一覧</button>
+                <button class="admin-tab" data-tab="settings">営業設定</button>
+            </div>
+            <div id="admin-reservations" class="admin-panel">
+                <div class="search-bar">
+                    <input type="text" id="admin-search" placeholder="氏名・電話番号・日付で検索" class="search-input">
+                </div>
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-filter="all">すべて</button>
+                    <button class="filter-btn" data-filter="booked">予約済</button>
+                    <button class="filter-btn" data-filter="completed">来店完了</button>
+                    <button class="filter-btn" data-filter="canceled">キャンセル</button>
+                </div>
+                <div id="admin-reservation-list" class="admin-reservation-list"></div>
+            </div>
+            <div id="admin-settings" class="admin-panel hidden">
+                <form id="form-settings" class="form-settings">
+                    <div class="form-group"><label>営業開始時間</label><input type="time" id="setting-open" value="10:00">
+                    </div>
+                    <div class="form-group"><label>営業終了時間</label><input type="time" id="setting-close" value="20:00">
+                    </div>
+                    <div class="form-group">
+                        <label>定休日</label>
+                        <div class="checkbox-row">
+                            <label class="checkbox-label"><input type="checkbox" name="holiday" value="0"> 日</label>
+                            <label class="checkbox-label"><input type="checkbox" name="holiday" value="1"> 月</label>
+                            <label class="checkbox-label"><input type="checkbox" name="holiday" value="2"> 火</label>
+                            <label class="checkbox-label"><input type="checkbox" name="holiday" value="3"> 水</label>
+                            <label class="checkbox-label"><input type="checkbox" name="holiday" value="4"> 木</label>
+                            <label class="checkbox-label"><input type="checkbox" name="holiday" value="5"> 金</label>
+                            <label class="checkbox-label"><input type="checkbox" name="holiday" value="6"> 土</label>
+                        </div>
+                    </div>
+                    <div class="form-group"><label for="setting-slot">予約枠の単位（分）</label>
+                        <select id="setting-slot">
+                            <option value="15">15分</option>
+                            <option value="30" selected>30分</option>
+                            <option value="60">60分</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="setting-max-days">最大予約可能日数</label><input type="number"
+                            id="setting-max-days" value="60" min="7" max="180"></div>
+                    <button type="button" id="btn-save-settings" class="btn-primary btn-full">設定を保存</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Reservation Detail Modal -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>予約詳細</h3>
+                <button id="btn-close-modal" class="btn-close-modal">✕</button>
+            </div>
+            <div id="modal-body" class="modal-body"></div>
+            <div class="modal-actions" id="modal-actions"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>
