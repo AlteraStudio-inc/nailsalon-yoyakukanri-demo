@@ -481,6 +481,53 @@
                 </table>
             </div>
             <p class="empty-state" id="customer-empty" style="display:none">顧客情報がありません</p>
+
+            <!-- Customer Record (EHR) Modal -->
+            <div class="modal-overlay hidden" id="customer-record-modal">
+                <div class="modal-box modal-lg">
+                    <div class="modal-head">
+                        <h3>電子カルテ</h3>
+                        <button class="btn-close" id="btn-close-record-modal">
+                            <svg width="20" height="20">
+                                <use href="#icon-close" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="record-body">
+                        <div class="record-header-info">
+                            <div class="record-name" id="record-customer-name">名前</div>
+                            <div class="record-meta">
+                                <span>📞 <span id="record-customer-phone"></span></span>
+                                <span id="record-customer-email-wrap" style="display:none;">✉️ <span
+                                        id="record-customer-email"></span></span>
+                            </div>
+                            <div class="record-stats">
+                                <span>来店回数: <strong id="record-visit-count">0</strong>回</span>
+                                <span style="margin-left:16px;">総利用額: <strong id="record-total-spent">¥0</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="record-content-grid">
+                            <!-- Left: History Timeline -->
+                            <div class="record-history-section">
+                                <h4>来店履歴</h4>
+                                <div class="history-list" id="record-history-list">
+                                    <!-- JS will inject timeline items here -->
+                                </div>
+                            </div>
+                            <!-- Right: Memo -->
+                            <div class="record-memo-section">
+                                <h4>サロン向けメモ</h4>
+                                <textarea id="record-memo-input" rows="10"
+                                    placeholder="お客様の好み、アレルギー、前回の会話内容などを記録できます..."></textarea>
+                                <button type="button" class="btn-primary" id="btn-save-record-memo"
+                                    style="width:100%; margin-top:12px;">メモを保存</button>
+                                <div id="record-memo-saved-msg" class="saved-msg hidden">保存しました</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ============ SETTINGS ============ -->

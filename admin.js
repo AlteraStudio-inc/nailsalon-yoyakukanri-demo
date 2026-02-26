@@ -8,7 +8,7 @@
     const LS = {
         shopInfo: 'br_shopInfo', menus: 'br_menus', settings: 'br_settings',
         reservations: 'br_reservations', notificationQueue: 'br_notificationQueue',
-        staffs: 'br_staffs'
+        staffs: 'br_staffs', customerNotes: 'br_customerNotes'
     };
 
     const DAY_NAMES = ['日', '月', '火', '水', '木', '金', '土'];
@@ -482,7 +482,7 @@
 
         empty.style.display = 'none';
         tbody.innerHTML = customers.map(c => `
-            <tr>
+            <tr class="customer-row" data-phone="${esc(c.phone)}" style="cursor: pointer;">
                 <td>${esc(c.name)}</td>
                 <td>${esc(c.phone)}</td>
                 <td>${esc(c.email || '-')}</td>
@@ -493,7 +493,108 @@
         `).join('');
     }
 
-    // ── Settings ──
+    let currentRecordPhone = null;
+
+    function showCustomerRecord(phone) {
+        currentRecordPhone = phone;
+        const reservations = lsGet(LS.reservations) || [];
+        const menus = lsGet(LS.menus) || [];
+        const staffs = lsGet(LS.staffs) || [];
+        const notesObj = lsGet(LS.customerNotes) || {};
+
+        // 顧客の全予約を取得
+        const customerRes = reservations.filter(r => r.customerPhone === phone);
+        if (customerRes.length === 0) return;
+
+        // 最新の情報でヘッダーを構築
+        const latest = [...customerRes].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+        // 統計データ
+        const validRes = customerRes.filter(r => r.status !== 'canceled');
+        const visits = validRes.length;
+        let totalSpent = 0;
+        validRes.forEach(r => {
+            const menu = menus.find(m => m.id === r.menuId);
+            totalSpent += menu ? menu.price : (r.price || 0);
+            if (r.staffFee) totalSpent += r.staffFee;
+        });
+
+        $('record-customer-name').textContent = latest.customerName || '名称未設定';
+        $('record-customer-phone').textContent = phone;
+        if (latest.customerEmail) {
+            $('record-customer-email').textContent = latest.customerEmail;
+            $('record-customer-email-wrap').style.display = 'inline';
+        } else {
+            $('record-customer-email-wrap').style.display = 'none';
+        }
+        $('record-visit-count').textContent = visits;
+        $('record-total-spent').textContent = formatPrice(totalSpent);
+
+        // メモの復元
+        const memoInput = $('record-memo-input');
+        memoInput.value = notesObj[phone] || '';
+        $('record-memo-saved-msg').classList.add('hidden');
+
+        // 履歴タイムラインの描画
+        const historyList = $('record-history-list');
+        historyList.innerHTML = '';
+
+        if (customerRes.length === 0) {
+            historyList.innerHTML = '<div style="color:var(--text-light);font-size:13px;">来店履歴がありません</div>';
+        } else {
+            // 日付の降順でソート（新しい順）
+            const sortedRes = [...customerRes].sort((a, b) => {
+                const da = new Date(a.date + 'T' + a.startTime);
+                const db = new Date(b.date + 'T' + b.startTime);
+                return db - da;
+            });
+
+            sortedRes.forEach(r => {
+                const menu = menus.find(m => m.id === r.menuId);
+                const menuPrice = menu ? menu.price : (r.price || 0);
+                let staffFee = r.staffFee || 0;
+                let totalPrice = menuPrice + staffFee;
+                let staffName = '指名なし';
+
+                if (r.staffId) {
+                    const staff = staffs.find(s => s.id === r.staffId);
+                    if (staff) staffName = staff.name;
+                }
+
+                const d = new Date(r.date);
+                const dateStrLabel = `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 (${DAY_NAMES[d.getDay()]}) ${r.startTime}`;
+                const statusClass = r.status === 'canceled' ? 'status-canceled' : '';
+                const statusLabel = r.status === 'canceled' ? '<span style="color:var(--danger);font-size:12px;margin-left:8px;">[キャンセル]</span>' : '';
+
+                historyList.innerHTML += `
+                    <div class="history-item ${statusClass}">
+                        <div class="hi-date">${dateStrLabel}${statusLabel}</div>
+                        <div class="hi-menu">💅 ${esc(r.menuName || '不明なメニュー')}</div>
+                        <div class="hi-details">
+                            <span>👤 担当: ${esc(staffName)}</span>
+                            <span>⏱ ${r.durationMinutes || '-'}分</span>
+                        </div>
+                        <div class="hi-amount">💰 ${formatPrice(totalPrice)}</div>
+                    </div>
+                `;
+            });
+        }
+
+        $('customer-record-modal').classList.remove('hidden');
+    }
+
+    function saveCustomerNote() {
+        if (!currentRecordPhone) return;
+        const noteText = $('record-memo-input').value;
+        const notesObj = lsGet(LS.customerNotes) || {};
+        notesObj[currentRecordPhone] = noteText;
+        lsSet(LS.customerNotes, notesObj);
+
+        // 保存完了メッセージの表示アニメーション
+        const msg = $('record-memo-saved-msg');
+        msg.classList.remove('hidden');
+        setTimeout(() => msg.classList.add('hidden'), 2000);
+    }
     function renderSettings() {
         const shop = lsGet(LS.shopInfo) || {};
         const settings = lsGet(LS.settings) || {};
@@ -756,8 +857,19 @@
             else if (action === 'delete-staff') deleteStaff(id);
         });
 
-        // Customer search
+        // Customer search & record
         $('customer-search').addEventListener('input', e => { customerSearch = e.target.value; renderCustomers(); });
+
+        $('customer-body').addEventListener('click', e => {
+            const row = e.target.closest('.customer-row');
+            if (row && row.dataset.phone) {
+                showCustomerRecord(row.dataset.phone);
+            }
+        });
+
+        $('btn-close-record-modal').addEventListener('click', () => $('customer-record-modal').classList.add('hidden'));
+        $('customer-record-modal').addEventListener('click', e => { if (e.target === $('customer-record-modal')) $('customer-record-modal').classList.add('hidden'); });
+        $('btn-save-record-memo').addEventListener('click', saveCustomerNote);
 
         // Settings save
         $('btn-save-settings').addEventListener('click', saveSettings);
