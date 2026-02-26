@@ -569,12 +569,12 @@
                 historyList.innerHTML += `
                     <div class="history-item ${statusClass}">
                         <div class="hi-date">${dateStrLabel}${statusLabel}</div>
-                        <div class="hi-menu">💅 ${esc(r.menuName || '不明なメニュー')}</div>
+                        <div class="hi-menu">メニュー：${esc(r.menuName || '不明なメニュー')}</div>
                         <div class="hi-details">
-                            <span>👤 担当: ${esc(staffName)}</span>
-                            <span>⏱ ${r.durationMinutes || '-'}分</span>
+                            <span>担当：${esc(staffName)}</span>
+                            <span>時間：${r.durationMinutes || '-'}分</span>
                         </div>
-                        <div class="hi-amount">💰 ${formatPrice(totalPrice)}</div>
+                        <div class="hi-amount">金額：${formatPrice(totalPrice)}</div>
                     </div>
                 `;
             });
