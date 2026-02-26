@@ -7,7 +7,8 @@
     // Same localStorage keys as the customer app
     const LS = {
         shopInfo: 'br_shopInfo', menus: 'br_menus', settings: 'br_settings',
-        reservations: 'br_reservations', notificationQueue: 'br_notificationQueue'
+        reservations: 'br_reservations', notificationQueue: 'br_notificationQueue',
+        staffs: 'br_staffs'
     };
 
     const DAY_NAMES = ['日', '月', '火', '水', '木', '金', '土'];
@@ -33,6 +34,7 @@
     let resSearch = '';
     let customerSearch = '';
     let editingMenuId = null;
+    let editingStaffId = null;
     let salesPeriod = 'daily';
     let salesYear = new Date().getFullYear();
     let salesMonth = new Date().getMonth() + 1; // 1-12
@@ -58,6 +60,7 @@
             case 'dashboard': renderDashboard(); break;
             case 'reservations': renderReservations(); break;
             case 'menus': renderMenus(); break;
+            case 'staffs': renderStaffs(); break;
             case 'sales': renderSales(); break;
             case 'customers': renderCustomers(); break;
             case 'settings': renderSettings(); break;
@@ -345,6 +348,87 @@
         menus = menus.filter(m => m.id !== menuId);
         lsSet(LS.menus, menus);
         renderMenus();
+    }
+
+    // ── Staffs ──
+    function renderStaffs() {
+        const staffs = lsGet(LS.staffs) || [];
+        const grid = $('staff-grid');
+
+        if (staffs.length === 0) {
+            grid.innerHTML = '<p class="empty-state">スタッフがいません</p>';
+            return;
+        }
+
+        grid.innerHTML = staffs.map(s => `
+            <div class="staff-card" data-staff-id="${s.id}">
+                <div class="staff-card-header">
+                    <img src="${esc(s.image || 'https://i.pravatar.cc/150')}" alt="${esc(s.name)}" class="staff-avatar" loading="lazy">
+                    <div class="staff-info">
+                        <div class="staff-name">${esc(s.name)}</div>
+                        <div class="staff-fee">指名料: ${formatPrice(s.fee)}</div>
+                    </div>
+                </div>
+                <div class="staff-desc">${esc(s.description || '')}</div>
+                <div class="staff-actions">
+                    <button class="btn-sm btn-sm-info" data-action="edit-staff" data-id="${s.id}">編集</button>
+                    <button class="btn-sm btn-sm-danger" data-action="delete-staff" data-id="${s.id}">削除</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function openStaffModal(staffId) {
+        editingStaffId = staffId || null;
+        const modal = $('staff-modal');
+
+        if (staffId) {
+            const staffs = lsGet(LS.staffs) || [];
+            const s = staffs.find(x => x.id === staffId);
+            if (!s) return;
+            $('staff-modal-title').textContent = 'スタッフ編集';
+            $('staff-name').value = s.name;
+            $('staff-image').value = s.image;
+            $('staff-fee').value = s.fee;
+            $('staff-desc').value = s.description;
+        } else {
+            $('staff-modal-title').textContent = 'スタッフ追加';
+            $('staff-form').reset();
+        }
+
+        modal.classList.remove('hidden');
+    }
+
+    function saveStaff() {
+        const name = $('staff-name').value.trim();
+        const image = $('staff-image').value.trim();
+        const fee = parseInt($('staff-fee').value) || 0;
+        const desc = $('staff-desc').value.trim();
+
+        if (!name) { alert('スタッフ名を入力してください'); return; }
+
+        const staffs = lsGet(LS.staffs) || [];
+
+        if (editingStaffId) {
+            const s = staffs.find(x => x.id === editingStaffId);
+            if (s) {
+                s.name = name; s.image = image; s.fee = fee; s.description = desc;
+            }
+        } else {
+            staffs.push({ id: 's' + uid(), name, image, fee, description: desc });
+        }
+
+        lsSet(LS.staffs, staffs);
+        $('staff-modal').classList.add('hidden');
+        renderStaffs();
+    }
+
+    function deleteStaff(staffId) {
+        if (!confirm('このスタッフを削除しますか？')) return;
+        let staffs = lsGet(LS.staffs) || [];
+        staffs = staffs.filter(s => s.id !== staffId);
+        lsSet(LS.staffs, staffs);
+        renderStaffs();
     }
 
     // ── Customers ──
@@ -654,6 +738,22 @@
             const id = btn.dataset.id;
             if (action === 'edit-menu') openMenuModal(id);
             else if (action === 'delete-menu') deleteMenu(id);
+        });
+
+        // Staff management
+        $('btn-add-staff').addEventListener('click', () => openStaffModal(null));
+        $('btn-close-staff-modal').addEventListener('click', () => $('staff-modal').classList.add('hidden'));
+        $('btn-cancel-staff').addEventListener('click', () => $('staff-modal').classList.add('hidden'));
+        $('staff-modal').addEventListener('click', e => { if (e.target === $('staff-modal')) $('staff-modal').classList.add('hidden'); });
+        $('staff-form').addEventListener('submit', e => { e.preventDefault(); saveStaff(); });
+
+        $('staff-grid').addEventListener('click', e => {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+            if (action === 'edit-staff') openStaffModal(id);
+            else if (action === 'delete-staff') deleteStaff(id);
         });
 
         // Customer search

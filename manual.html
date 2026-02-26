@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ネイルサロン予約システム ご利用マニュアル</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* PDF出力・印刷用のスタイル */
+        :root {
+            --primary: #FF7B9C;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --bg: #fdfdfd;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            /* ブラウザプレビュー用背景 */
+        }
+
+        /* A4サイズのページ設定 */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 10mm auto;
+            border-radius: 5px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 20px;
+            background-color: #fff0f3;
+            color: #d81b60;
+            padding: 8px 12px;
+            border-left: 5px solid var(--primary);
+            margin-top: 30px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: #d81b60;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 4px;
+            margin-top: 20px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .step-box {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: var(--bg);
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        .note {
+            background-color: #fff9e6;
+            padding: 10px 15px;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 15px;
+            color: #665000;
+        }
+
+        /* 印刷時の設定 */
+        @media print {
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .page {
+                margin: 0;
+                padding: 15mm;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+                width: 100%;
+                min-height: auto;
+            }
+
+            /* ページ分割の制御 */
+            h2 {
+                page-break-after: avoid;
+            }
+
+            .step-box {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+        <h1>ネイルサロン予約システム<br>ご利用マニュアル</h1>
+
+        <p>このたびは「Beauty Reserve（ビューティーリザーブ）」を導入いただき、ありがとうございます。<br>
+            このシステムは、お客様がスマホからかんたんに予約できる「お客様用画面」と、お店の方が予約や売上を確認できる「お店用（管理）画面」の2つからできています。</p>
+
+        <!-- ============================================== -->
+        <h2>1. お店用（管理）画面の見かた</h2>
+        <p>管理画面では、お店のすべての情報を見ることができます。画面の左側にあるメニューから、見たいページを選んでください。</p>
+
+        <div class="step-box">
+            <div class="step-title">ダッシュボード（はじめの画面）</div>
+            <p>「今日の予約はあと何件かな？」「今月の売上はどうかな？」という情報がひと目でわかるようになっています。直近の予約一覧もここで確認できます。</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">予約管理</div>
+            <p>お客様からの予約がすべてリストになって並んでいます。</p>
+            <ul>
+                <li><strong>お客様が来店されたら</strong>：「ステータス（状況）」を『来店完了』に変更してください。これで売上が確定します。</li>
+                <li><strong>キャンセルになったら</strong>：ステータスを『キャンセル』に変更してください。</li>
+                <li>お名前や電話番号で、過去の予約を探すこともできます。</li>
+            </ul>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">メニュー管理</div>
+            <p>お店のメニュー（ジェルネイル、ケアなど）を作ったり、値段や時間を変更したりする場所です。</p>
+            <ul>
+                <li>「人気メニューとして表示」にチェックを入れると、お客様の画面で「人気」のマークがつきます。</li>
+            </ul>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">売上管理</div>
+            <p>今日、今週、今月の売上と来客数がグラフと表で確認できます。上のボタンや年月変更で、過去や未来の売上データを見比べることもできます。（※売上は「来店完了」になった予約から計算されます）</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">顧客一覧</div>
+            <p>過去に来店されたお客様のリストです。「このお客様は何回くらい来てくれているかな？」などがわかります。</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">営業設定</div>
+            <p>お店の営業時間や、お休みの曜日を決める場所です。ここを変えると、お客様の予約カレンダーで「×（予約不可）」になる時間が自動的に変わります。</p>
+        </div>
+
+        <!-- ============================================== -->
+        <h2>2. お客様が予約をする流れ（参考）</h2>
+        <p>お客様用画面は、お買い物アプリのようにスムーズに予約できるよう作られています。</p>
+
+        <div class="step-box">
+            <div class="step-title"><span class="step-number">1</span> メニューを選ぶ</div>
+            <p>お客様はお店のメニュー一覧から、受けたいメニュー（複数も可）を選びます。</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title"><span class="step-number">2</span> 日時を選ぶ</div>
+            <p>カレンダーから、予約できる日（◯や△のついた日）を押し、お好きな時間を選びます。</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title"><span class="step-number">3</span> お名前などを入力する</div>
+            <p>お名前、電話番号、メールアドレスを入力します。</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title"><span class="step-number">4</span> 予約完了！</div>
+            <p>予約ボタンを押すと、お客様の画面に「予約が完了しました」と表示されます。同時に、管理画面の「予約管理」に新しい予約が追加されます。</p>
+        </div>
+
+        <div class="note">
+            <strong>【PDFとして保存・印刷する方法】</strong><br>
+            パソコンのブラウザ（Google ChromeやEdgeなど）でこの画面を開いたまま、キーボードの「Ctrl」を押しながら「P」のキーを押してください（Macの場合は「Command」＋「P」）。<br>
+            印刷画面が開くので、送信先（プリンター）を「PDFに保存」に変更して「保存」ボタンを押すだけで、きれいなPDFファイルとして文字データを保存できます。紙に印刷する場合はそのままプリンターを選んでください。
+        </div>
+    </div>
+
+</body>
+
+</html>

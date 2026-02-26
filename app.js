@@ -7,7 +7,8 @@
         shopInfo: 'br_shopInfo', menus: 'br_menus', settings: 'br_settings',
         reservations: 'br_reservations', notificationQueue: 'br_notificationQueue',
         lastCustomer: 'br_lastCustomer', notifDismissed: 'br_notifDismissed',
-        inAppNotifications: 'br_inAppNotifications', loggedInUser: 'br_loggedInUser'
+        inAppNotifications: 'br_inAppNotifications', loggedInUser: 'br_loggedInUser',
+        staffs: 'br_staffs'
     };
     const DAY_NAMES = ['日', '月', '火', '水', '木', '金', '土'];
     const DEFAULT_SHOP = {
@@ -22,10 +23,15 @@
         { id: 'm4', name: 'メンズネイルケア', description: '男性向けの爪のお手入れ。', price: 4500, duration: 45, popular: false },
         { id: 'm5', name: 'カラーグラデーション', description: '自然なグラデーションで指先を美しく。', price: 7500, duration: 90, popular: false }
     ];
+    const DEFAULT_STAFFS = [
+        { id: 's1', name: 'MINAMI', image: 'https://i.pravatar.cc/150?img=47', fee: 500, description: 'トレンドアートが得意です！' },
+        { id: 's2', name: 'YUKA', image: 'https://i.pravatar.cc/150?img=32', fee: 300, description: '丁寧なケアを心がけています。' },
+        { id: 's3', name: 'AI', image: 'https://i.pravatar.cc/150?img=26', fee: 0, description: 'シンプル綺麗なデザインはお任せください。' }
+    ];
     const DEFAULT_SETTINGS = { openTime: '10:00', closeTime: '20:00', holidays: [2], slotMinutes: 30, maxDays: 60 };
 
     let state = {
-        currentScreen: 'top', selectedMenu: null, selectedDate: null, selectedTime: null,
+        currentScreen: 'top', selectedMenu: null, selectedStaff: null, selectedDate: null, selectedTime: null,
         customerInfo: {}, note: '', weekStartDate: null,
         adminFilter: 'all', adminSearch: '', nextBookingData: null, lastReservation: null
     };
@@ -62,6 +68,7 @@
     function initData() {
         if (!lsGet(LS_KEYS.shopInfo)) lsSet(LS_KEYS.shopInfo, DEFAULT_SHOP);
         if (!lsGet(LS_KEYS.menus)) lsSet(LS_KEYS.menus, DEFAULT_MENUS);
+        if (!lsGet(LS_KEYS.staffs)) lsSet(LS_KEYS.staffs, DEFAULT_STAFFS);
         if (!lsGet(LS_KEYS.settings)) lsSet(LS_KEYS.settings, DEFAULT_SETTINGS);
         if (!lsGet(LS_KEYS.notificationQueue)) lsSet(LS_KEYS.notificationQueue, []);
         if (!lsGet(LS_KEYS.inAppNotifications)) lsSet(LS_KEYS.inAppNotifications, []);
@@ -90,8 +97,8 @@
     }
 
     // ── Navigation ──
-    const SCREENS = ['top', 'datetime', 'info', 'note', 'confirm', 'done', 'mypage', 'admin', 'gallery'];
-    const STEP_MAP = { top: 'menu', datetime: 'datetime', info: 'info', note: 'note', confirm: 'confirm', done: 'done' };
+    const SCREENS = ['top', 'staff', 'datetime', 'info', 'note', 'confirm', 'done', 'mypage', 'admin', 'gallery'];
+    const STEP_MAP = { top: 'menu', staff: 'staff', datetime: 'datetime', info: 'info', note: 'note', confirm: 'confirm', done: 'done' };
 
     function navigate(screen) {
         state.currentScreen = screen;
@@ -115,7 +122,7 @@
     }
 
     function updateStepBar(screen) {
-        const stepOrder = ['menu', 'datetime', 'info', 'note', 'confirm', 'done'];
+        const stepOrder = ['menu', 'staff', 'datetime', 'info', 'note', 'confirm', 'done'];
         const current = STEP_MAP[screen]; if (!current) return;
         const currentIdx = stepOrder.indexOf(current);
         qsa('.step').forEach(el => {
@@ -146,6 +153,23 @@
         <button class="btn-select-menu" data-menu-id="${m.id}">このメニューを選ぶ</button>`;
             list.appendChild(card);
         });
+    }
+
+    function renderStaffsForCustomer() {
+        $('selected-menu-for-staff').textContent = `💅 ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}`;
+        const staffs = lsGet(LS_KEYS.staffs) || [];
+        const grid = $('staff-selection-grid');
+        grid.innerHTML = staffs.map(s => `
+            <div class="staff-selection-card">
+                <img src="${esc(s.image || 'https://i.pravatar.cc/150')}" alt="${esc(s.name)}" class="staff-selection-avatar" loading="lazy">
+                <div class="staff-selection-info">
+                    <div class="staff-selection-name">${esc(s.name)}</div>
+                    <div class="staff-selection-fee">指名料: ${formatPrice(s.fee)}</div>
+                    <div class="staff-selection-desc">${esc(s.description || '')}</div>
+                </div>
+                <button type="button" class="btn-select-staff" data-id="${s.id}" data-fee="${s.fee}" data-name="${esc(s.name)}">指名する</button>
+            </div>
+        `).join('');
     }
 
     // ── Render: Week Grid (HPB style) ──
@@ -257,7 +281,18 @@
         const shop = lsGet(LS_KEYS.shopInfo); const m = state.selectedMenu;
         $('confirm-shop').textContent = shop.name;
         $('confirm-menu').textContent = m.name;
-        $('confirm-duration-price').textContent = `⏱ ${m.duration}分 ／ ${formatPrice(m.price)}`;
+
+        let staffFeeStr = '';
+        if (state.selectedStaff && state.selectedStaff.id) {
+            staffFeeStr = `👤 指名スタッフ: ${state.selectedStaff.name} (指名料: ${formatPrice(state.selectedStaff.fee)})`;
+        } else {
+            staffFeeStr = `👤 指名スタッフ: なし`;
+        }
+        $('confirm-staff').textContent = staffFeeStr;
+
+        const totalPrice = m.price + (state.selectedStaff ? state.selectedStaff.fee : 0);
+        $('confirm-duration-price').textContent = `合計金額: ${formatPrice(totalPrice)} (${m.duration}分)`;
+
         const endTime = minToTime(timeToMin(state.selectedTime) + m.duration);
         $('confirm-datetime').textContent = `${formatDate(state.selectedDate)}　${state.selectedTime}〜${endTime}`;
         $('confirm-name').textContent = `お名前: ${state.customerInfo.name}`;
@@ -276,8 +311,10 @@
         const endTime = minToTime(timeToMin(state.selectedTime) + m.duration);
         const endDateTime = new Date(`${state.selectedDate}T${endTime}:00`);
         const nextSuggestAt = endDateTime.getTime() + 10 * 60000;
+        const totalPrice = m.price + (state.selectedStaff ? state.selectedStaff.fee : 0);
         const reservation = {
-            reservationId: uid(), menuId: m.id, menuName: m.name, durationMinutes: m.duration, price: m.price,
+            reservationId: uid(), menuId: m.id, menuName: m.name, durationMinutes: m.duration, price: totalPrice,
+            staffId: state.selectedStaff ? state.selectedStaff.id : null, staffFee: state.selectedStaff ? state.selectedStaff.fee : 0,
             date: state.selectedDate, startTime: state.selectedTime, endTime: endTime,
             customerName: state.customerInfo.name, customerPhone: state.customerInfo.phone,
             customerEmail: state.customerInfo.email || '', note: state.note, status: 'booked',
@@ -739,6 +776,7 @@
                 const past = new Date(); past.setMonth(past.getMonth() - 1);
                 const pastRes = {
                     reservationId: uid(), menuId: 'm1', menuName: 'デザインネイル(仮)', durationMinutes: 90, price: 8800,
+                    staffId: 's1', staffFee: 500,
                     date: dateStr(past), startTime: '10:00', endTime: '11:30',
                     customerName: name, customerPhone: phone, customerEmail: 'test@example.com',
                     note: 'テスト', status: 'completed',
@@ -748,6 +786,7 @@
                 const future = new Date(); future.setDate(future.getDate() + 14);
                 const futureRes = {
                     reservationId: uid(), menuId: 'm3', menuName: 'ワンカラー(仮)', durationMinutes: 60, price: 5500,
+                    staffId: null, staffFee: 0,
                     date: dateStr(future), startTime: '14:00', endTime: '15:00',
                     customerName: name, customerPhone: phone, customerEmail: 'test@example.com',
                     note: 'テスト', status: 'booked',
@@ -773,9 +812,25 @@
             const btn = e.target.closest('.btn-select-menu'); if (!btn) return;
             const menus = lsGet(LS_KEYS.menus);
             state.selectedMenu = menus.find(m => m.id === btn.dataset.menuId);
+            state.selectedStaff = null;
             state.selectedDate = null; state.selectedTime = null;
+            renderStaffsForCustomer(); navigate('staff');
+        });
+        // Staff selection
+        $('btn-back-staff').addEventListener('click', () => { navigate('top'); });
+        $('staff-selection-grid').addEventListener('click', e => {
+            const btn = e.target.closest('.btn-select-staff'); if (!btn) return;
+            state.selectedStaff = { id: btn.dataset.id, name: btn.dataset.name, fee: parseInt(btn.dataset.fee) };
             const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
-            $('selected-menu-summary').textContent = `💅 ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}`;
+            let staffFeePrice = formatPrice(state.selectedStaff.fee);
+            if (state.selectedStaff.fee === 0) staffFeePrice = '無料';
+            $('selected-menu-summary').innerHTML = `💅 ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>👤 指名: ${state.selectedStaff.name} (${staffFeePrice})`;
+            renderWeekGrid(); navigate('datetime');
+        });
+        $('btn-staff-none').addEventListener('click', () => {
+            state.selectedStaff = { id: null, name: '指名なし', fee: 0 };
+            const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
+            $('selected-menu-summary').innerHTML = `💅 ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>👤 指名: なし`;
             renderWeekGrid(); navigate('datetime');
         });
         // Week nav
@@ -799,7 +854,7 @@
             navigate('info');
         });
         // Back buttons
-        $('btn-back-datetime').addEventListener('click', () => { navigate('top'); renderTop(); });
+        $('btn-back-datetime').addEventListener('click', () => { navigate('staff'); });
         $('btn-back-info').addEventListener('click', () => { renderWeekGrid(); navigate('datetime'); });
         $('btn-back-note').addEventListener('click', () => navigate('info'));
         $('btn-back-confirm').addEventListener('click', () => navigate('note'));

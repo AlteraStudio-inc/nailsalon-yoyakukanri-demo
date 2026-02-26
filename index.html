@@ -61,17 +61,19 @@
         <div class="step-bar-inner">
             <div class="step" data-step="menu"><span class="step-num">1</span><span class="step-label">メニュー</span></div>
             <div class="step-line"></div>
-            <div class="step" data-step="datetime"><span class="step-num">2</span><span class="step-label">日時</span>
+            <div class="step" data-step="staff"><span class="step-num">2</span><span class="step-label">指名</span></div>
+            <div class="step-line"></div>
+            <div class="step" data-step="datetime"><span class="step-num">3</span><span class="step-label">日時</span>
             </div>
             <div class="step-line"></div>
-            <div class="step" data-step="info"><span class="step-num">3</span><span class="step-label">情報</span></div>
+            <div class="step" data-step="info"><span class="step-num">4</span><span class="step-label">情報</span></div>
             <div class="step-line"></div>
-            <div class="step" data-step="note"><span class="step-num">4</span><span class="step-label">備考</span></div>
+            <div class="step" data-step="note"><span class="step-num">5</span><span class="step-label">備考</span></div>
             <div class="step-line"></div>
-            <div class="step" data-step="confirm"><span class="step-num">5</span><span class="step-label">確認</span>
+            <div class="step" data-step="confirm"><span class="step-num">6</span><span class="step-label">確認</span>
             </div>
             <div class="step-line"></div>
-            <div class="step" data-step="done"><span class="step-num">6</span><span class="step-label">完了</span></div>
+            <div class="step" data-step="done"><span class="step-num">7</span><span class="step-label">完了</span></div>
         </div>
     </div>
 
@@ -107,6 +109,21 @@
                 <h2>デザインギャラリー</h2>
             </div>
             <div class="gallery-grid" id="gallery-grid"></div>
+        </section>
+
+        <!-- STAFF SELECTION -->
+        <section id="screen-staff" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" id="btn-back-staff">← 戻る</button>
+                <h2>スタッフを指名</h2>
+            </div>
+            <div id="selected-menu-for-staff" class="selected-summary"></div>
+            <div class="staff-selection-grid" id="staff-selection-grid">
+                <!-- Javascript will inject staff items here -->
+            </div>
+            <!-- Skip button / no staff chosen -->
+            <button type="button" id="btn-staff-none" class="btn-secondary btn-full" style="margin-top:20px;">指名なしで次へ
+                (＋0円)</button>
         </section>
 
         <!-- DATETIME: Combined date + time (HPB-style weekly grid) -->
@@ -206,6 +223,7 @@
                 <div class="confirm-section">
                     <h3>💅 メニュー</h3>
                     <p id="confirm-menu"></p>
+                    <p id="confirm-staff" style="margin-top:4px;"></p>
                     <p id="confirm-duration-price" class="sub-info"></p>
                 </div>
                 <div class="confirm-section">
@@ -241,14 +259,7 @@
             </div>
         </section>
 
-        <!-- GALLERY -->
-        <section id="screen-gallery" class="screen">
-            <div class="screen-header">
-                <button class="btn-back" id="btn-back-gallery">← トップへ</button>
-                <h2>デザインギャラリー</h2>
-            </div>
-            <div class="gallery-grid" id="gallery-grid"></div>
-        </section>
+        <!-- GALLERY (Mobile fix just in case) -->
 
         <!-- MYPAGE -->
         <section id="screen-mypage" class="screen">
