@@ -41,6 +41,14 @@
     padding: 0;
 }
 
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     font-family: var(--font-jp);
     color: var(--text);
@@ -979,7 +987,8 @@ section {
 @media (max-width: 768px) {
 
     .nav-links,
-    .header-actions {
+    .header-actions,
+    .hero-bg-shapes {
         display: none;
     }
 
