@@ -1,174 +1,193 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ネイルサロン特化型 予約・顧客管理システム | Beauty Reserve</title>
+    <title>ネイルサロン専用 予約・顧客管理システム｜無料デモ体験</title>
+    <meta name="description" content="個人ネイルサロン向けの予約・顧客管理システム。24時間オンライン予約受付、リピーター専用導線、顧客情報の一元管理をスマホ1つで実現。無料でデモ体験できます。">
+    <meta property="og:title" content="ネイルサロン専用 予約・顧客管理システム">
+    <meta property="og:description" content="24時間予約受付×顧客管理で、サロン運営をもっとシンプルに。">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="lp.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <!-- Header -->
-    <header class="header">
+
+    <!-- ==================== -->
+    <!-- ① 固定ヘッダー       -->
+    <!-- ==================== -->
+    <header class="header" id="header">
         <div class="header-inner">
-            <div class="logo">Beauty Reserve</div>
-            <nav class="nav">
+            <a href="#" class="logo">Beauty Reserve</a>
+            <nav class="nav" id="nav">
                 <ul class="nav-list">
-                    <li><a href="#features">機能・メリット</a></li>
-                    <li><a href="#demo">画面イメージ</a></li>
+                    <li><a href="#problems">お悩み</a></li>
+                    <li><a href="#features">機能紹介</a></li>
+                    <li><a href="#flow">導入の流れ</a></li>
+                    <li><a href="#pricing">料金</a></li>
+                    <li><a href="#faq">よくある質問</a></li>
                 </ul>
-                <div class="header-actions">
-                    <a href="index.html" class="btn btn-outline">お客様用デモ</a>
-                    <a href="admin.html" class="btn btn-primary">管理画面デモ</a>
-                </div>
             </nav>
-            <button class="menu-toggle" aria-label="メニュー開閉">
-                <span></span>
-                <span></span>
-                <span></span>
+            <a href="admin.html" class="btn btn-cta header-cta">無料でデモを試す</a>
+            <button class="menu-toggle" id="menu-toggle" aria-label="メニュー開閉">
+                <span></span><span></span><span></span>
             </button>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- ==================== -->
+    <!-- ② ファーストビュー    -->
+    <!-- ==================== -->
     <section class="hero">
-        <div class="hero-inner">
+        <div class="hero-inner container">
             <div class="hero-content">
-                <h1 class="hero-title">予約もカルテも、<br>これひとつでスマートに。</h1>
-                <p class="hero-text">ネイルサロンの業務に特化したクラウド型予約・顧客管理システム。<br>直感的な操作で、日々の業務負担を軽減し、売上アップと顧客満足度の向上を支援します。</p>
-                <div class="hero-buttons">
-                    <a href="admin.html" class="btn btn-primary btn-lg">無料で試してみる</a>
-                    <p class="hero-note">※アカウント登録不要でデモ画面を体験できます</p>
+                <p class="hero-target">個人ネイルサロンオーナー様へ</p>
+                <h1 class="hero-title">"また来たい"を逃さない。<br>サロン専用の予約・顧客管理システム</h1>
+                <p class="hero-sub">24時間自動受付 × 顧客管理の一元化で、<br>小規模サロンの"1人運営"をまるごとサポートします。</p>
+                <div class="hero-cta-wrap">
+                    <a href="admin.html" class="btn btn-cta btn-lg">無料でデモを体験する →</a>
+                    <p class="hero-note">※ 登録不要・30秒で体験できます</p>
                 </div>
             </div>
-            <div class="hero-image">
-                <div class="mockup-window">
-                    <div class="mockup-top">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                    </div>
-                    <div class="mockup-body mockup-dashboard">
-                        <!-- CSS/HTML Illustration of Dashboard -->
-                        <div class="mock-kpi-row">
-                            <div class="mock-kpi"><span>今日の予約</span><strong>8件</strong></div>
-                            <div class="mock-kpi"><span>売上見込</span><strong>¥54,000</strong></div>
+            <div class="hero-visual">
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="phone-header-bar">Beauty Reserve</div>
+                        <div class="phone-menu-item">
+                            <span class="phone-menu-dot"></span>
+                            <div>
+                                <div class="phone-menu-name">ジェルネイル</div>
+                                <div class="phone-menu-price">¥5,500〜</div>
+                            </div>
                         </div>
-                        <div class="mock-table">
-                            <div class="mock-tr"><div class="mock-td">10:00</div><div class="mock-td">田中 美咲 様</div><div class="mock-td">ジェルネイル</div></div>
-                            <div class="mock-tr"><div class="mock-td">12:30</div><div class="mock-td">佐藤 愛 様</div><div class="mock-td">オフ＋ワンカラー</div></div>
-                            <div class="mock-tr"><div class="mock-td">15:00</div><div class="mock-td">鈴木 結衣 様</div><div class="mock-td">デザインネイル</div></div>
+                        <div class="phone-menu-item active">
+                            <span class="phone-menu-dot"></span>
+                            <div>
+                                <div class="phone-menu-name">デザインネイル</div>
+                                <div class="phone-menu-price">¥8,800〜</div>
+                            </div>
                         </div>
+                        <div class="phone-menu-item">
+                            <span class="phone-menu-dot"></span>
+                            <div>
+                                <div class="phone-menu-name">オフ＋ワンカラー</div>
+                                <div class="phone-menu-price">¥6,600〜</div>
+                            </div>
+                        </div>
+                        <div class="phone-btn">次へ進む</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Problems Section -->
-    <section class="problems">
+    <!-- ==================== -->
+    <!-- ③ お悩み共感           -->
+    <!-- ==================== -->
+    <section class="problems" id="problems">
         <div class="container">
-            <h2 class="section-title text-center">サロン運営でこんなお悩みはありませんか？</h2>
+            <h2 class="section-title">こんなお悩み、ありませんか？</h2>
             <div class="problem-grid">
                 <div class="problem-card">
                     <div class="problem-icon">📞</div>
-                    <h3 class="problem-title">施術中の電話対応</h3>
-                    <p class="problem-text">接客・施術中に予約の電話が鳴り、お客様をお待たせしてしまう。</p>
+                    <p class="problem-text">施術中に予約の電話が鳴り、手を止めなければならない</p>
                 </div>
                 <div class="problem-card">
-                    <div class="problem-icon">📝</div>
-                    <h3 class="problem-title">紙カルテの管理・検索</h3>
-                    <p class="problem-text">過去の施術内容やメモを探すのに時間がかかり、保管場所も圧迫している。</p>
+                    <div class="problem-icon">�</div>
+                    <p class="problem-text">紙の台帳やLINEでの予約管理がバラバラで、ダブルブッキングが怖い</p>
                 </div>
                 <div class="problem-card">
-                    <div class="problem-icon">😫</div>
-                    <h3 class="problem-title">予約枠の管理ミス</h3>
-                    <p class="problem-text">スタッフのシフトや指名、メニューの所要時間の計算を手作業で行い、ダブルブッキングが不安。</p>
+                    <div class="problem-icon">🔁</div>
+                    <p class="problem-text">リピーターのお客様の前回メニューや好みを毎回思い出せない</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🌙</div>
+                    <p class="problem-text">営業時間外の予約を取りこぼしている気がする</p>
                 </div>
             </div>
-            <div class="solution-arrow">
-                <p>Beauty Reserveなら、すべての課題を解決します！</p>
-                <div class="arrow-down"></div>
+            <div class="problem-resolve">
+                <p class="resolve-text">その悩み、すべてこのシステムで解決できます。</p>
+                <div class="arrow-down">↓</div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
+    <!-- ==================== -->
+    <!-- ④ 機能紹介            -->
+    <!-- ==================== -->
+    <section class="features" id="features">
         <div class="container">
-            
-            <!-- Feature 1: Matching the user's image exactly -->
+            <h2 class="section-title">3つの機能で、サロン運営をもっとシンプルに。</h2>
+
+            <!-- 機能1 -->
             <div class="feature-row">
                 <div class="feature-content">
                     <span class="feature-number">01</span>
-                    <h2 class="feature-title">24時間365日受付<br>オンライン予約システム</h2>
-                    <p class="feature-desc">
-                        スマートフォンからいつでも予約が可能になり、機会損失を防ぎます。<br>
-                        また、既存顧客の予約は顧客管理システムと連携した専用導線から行うことで、再来店時の予約負担を軽減し、スムーズな予約体験と顧客情報の一元管理を実現します。
-                    </p>
-                    <ul class="feature-list">
-                        <li><span class="check-icon">✓</span> 既存顧客の再予約をスムーズにする専用導線の提供</li>
-                        <li><span class="check-icon">✓</span> サロンの営業時間・定休日を考慮した自動枠設定</li>
-                        <li><span class="check-icon">✓</span> スタッフ指名・指名料の自動計算機能</li>
+                    <h3 class="feature-title">24時間 オンライン予約受付</h3>
+                    <p class="feature-desc">営業時間外でもスマホから予約OK。営業時間・定休日に合わせた予約枠を自動生成。もう電話番のために手を止める必要はありません。</p>
+                    <ul class="feature-checks">
+                        <li><span class="check">✓</span>営業時間・定休日を考慮した自動枠設定</li>
+                        <li><span class="check">✓</span>スタッフ指名・指名料の自動計算機能</li>
                     </ul>
                 </div>
                 <div class="feature-image">
-                    <div class="mockup-window">
-                        <div class="mockup-top">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                        </div>
-                        <div class="mockup-body mockup-staff">
-                            <div class="mock-staff-card">
-                                <div class="mock-avatar bg-yellow"></div>
-                                <div class="mock-staff-name">スタッフA</div>
-                                <div class="mock-staff-fee">指名料 ¥500</div>
-                            </div>
-                            <div class="mock-staff-card">
-                                <div class="mock-avatar bg-yellow"></div>
-                                <div class="mock-staff-name">スタッフB</div>
-                                <div class="mock-staff-fee">指名料 ¥300</div>
+                    <div class="mockup-browser">
+                        <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span
+                                class="dot g"></span></div>
+                        <div class="browser-body">
+                            <div class="mock-calendar">
+                                <div class="cal-header">2026年4月</div>
+                                <div class="cal-grid">
+                                    <span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span><span>日</span>
+                                    <span></span><span></span><span>1</span><span>2</span><span
+                                        class="avail">3</span><span class="avail">4</span><span>5</span>
+                                    <span class="avail">6</span><span class="avail">7</span><span>8</span><span
+                                        class="avail">9</span><span class="avail">10</span><span
+                                        class="avail selected">11</span><span>12</span>
+                                </div>
+                                <div class="cal-slots">
+                                    <span class="slot">10:00</span><span class="slot active">13:00</span><span
+                                        class="slot">15:30</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Feature 2 -->
+            <!-- 機能2 -->
             <div class="feature-row reverse">
                 <div class="feature-content">
                     <span class="feature-number">02</span>
-                    <h2 class="feature-title">電子カルテで<br>顧客情報をスマートに一元管理</h2>
-                    <p class="feature-desc">
-                        ご予約いただいたお客様の情報は自動的に顧客リストへ蓄積。タップひとつで過去の来店履歴、利用したメニュー、担当スタッフ、累計金額をすぐに確認できます。
+                    <h3 class="feature-title">リピーター専用のスムーズ予約導線</h3>
+                    <p class="feature-desc">既存顧客は顧客管理システムと連携した専用導線から予約。名前や連絡先の再入力が不要で、お客様の負担を最小限に。"また来たい"を"また来る"に変えます。
                     </p>
-                    <ul class="feature-list">
-                        <li><span class="check-icon">✓</span> アレルギーや好みを残せる「サロン向けメモ」機能</li>
-                        <li><span class="check-icon">✓</span> 紙カルテからの脱却による省スペース・検索性の向上</li>
-                        <li><span class="check-icon">✓</span> 来店回数や売上に基づく自動集計</li>
+                    <ul class="feature-checks">
+                        <li><span class="check">✓</span>マイページからワンタップ再予約</li>
+                        <li><span class="check">✓</span>過去の予約履歴をいつでも確認可能</li>
                     </ul>
                 </div>
                 <div class="feature-image">
-                    <div class="mockup-window">
-                        <div class="mockup-top">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                        </div>
-                        <div class="mockup-body mockup-ehr">
-                            <div class="mock-ehr-header">
-                                <div class="ehr-name">田中 美咲</div>
-                                <div class="ehr-stats">来店回数: 5回 | 総利用額: ¥32,000</div>
-                            </div>
-                            <div class="mock-ehr-history">
-                                <div class="ehr-item">
-                                    <div class="ehr-date">2026年3月12日 14:00</div>
-                                    <div class="ehr-menu">デザインネイル (担当: スタッフA)</div>
+                    <div class="mockup-browser">
+                        <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span
+                                class="dot g"></span></div>
+                        <div class="browser-body">
+                            <div class="mock-mypage">
+                                <div class="mypage-greeting">田中 美咲 様</div>
+                                <div class="mypage-card">
+                                    <div class="mypage-label">前回の来店</div>
+                                    <div class="mypage-value">2026/3/12 — デザインネイル</div>
                                 </div>
-                                <div class="ehr-item">
-                                    <div class="ehr-date">2026年2月10日 15:00</div>
-                                    <div class="ehr-menu">ワンカラー (担当: スタッフA)</div>
+                                <div class="mypage-btn">同じメニューで予約する →</div>
+                                <div class="mypage-card">
+                                    <div class="mypage-label">来店回数</div>
+                                    <div class="mypage-value-big">5<small>回</small></div>
                                 </div>
                             </div>
                         </div>
@@ -176,34 +195,39 @@
                 </div>
             </div>
 
-            <!-- Feature 3 -->
+            <!-- 機能3 -->
             <div class="feature-row">
                 <div class="feature-content">
                     <span class="feature-number">03</span>
-                    <h2 class="feature-title">日々の売上を自動集計<br>経営状態を可視化</h2>
-                    <p class="feature-desc">
-                        来店完了処理を行うだけで、自動的に売上が集計されます。ダッシュボードでは「本日の売上見込」「今月の来店完了数」などの重要指標（KPI）をリアルタイムで把握可能です。
-                    </p>
-                    <ul class="feature-list">
-                        <li><span class="check-icon">✓</span> 日別・週別・月別の売上推移グラフ（CSV出力不要の直感的なUI）</li>
-                        <li><span class="check-icon">✓</span> メニューごとの料金設定に応じた正確な自動計算</li>
-                        <li><span class="check-icon">✓</span> 煩雑なレジ締め業務・売上管理の手間を大幅カット</li>
+                    <h3 class="feature-title">顧客情報の一元管理</h3>
+                    <p class="feature-desc">お客様の来店履歴・メニュー・備考を自動で記録。前回のデザインやアレルギー情報もすぐに確認でき、パーソナルな接客を実現します。</p>
+                    <ul class="feature-checks">
+                        <li><span class="check">✓</span>来店回数・履歴の自動記録</li>
+                        <li><span class="check">✓</span>備考・要望の引き継ぎ</li>
                     </ul>
                 </div>
                 <div class="feature-image">
-                    <div class="mockup-window">
-                        <div class="mockup-top">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                        </div>
-                        <div class="mockup-body mockup-sales">
-                            <div class="mock-bar-chart">
-                                <div class="bar" style="height: 40%"><span>4/1</span></div>
-                                <div class="bar" style="height: 60%"><span>4/2</span></div>
-                                <div class="bar" style="height: 80%"><span>4/3</span></div>
-                                <div class="bar" style="height: 50%"><span>4/4</span></div>
-                                <div class="bar" style="height: 90%; background: var(--primary)"><span>4/5</span></div>
+                    <div class="mockup-browser">
+                        <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span
+                                class="dot g"></span></div>
+                        <div class="browser-body">
+                            <div class="mock-ehr">
+                                <div class="ehr-top">
+                                    <div class="ehr-name">田中 美咲 様</div>
+                                    <div class="ehr-stat">来店 5回 ｜ 総額 ¥32,000</div>
+                                </div>
+                                <div class="ehr-timeline">
+                                    <div class="ehr-entry"><span class="ehr-dot"></span>
+                                        <div><strong>3/12</strong> デザインネイル（担当: MINAMI）</div>
+                                    </div>
+                                    <div class="ehr-entry"><span class="ehr-dot"></span>
+                                        <div><strong>2/10</strong> ワンカラー（担当: YUKI）</div>
+                                    </div>
+                                </div>
+                                <div class="ehr-memo">
+                                    <div class="ehr-memo-label">サロンメモ</div>
+                                    <div class="ehr-memo-text">パステル系が好み。ジェルの持ちが良い爪質。</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -213,35 +237,204 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="cta-inner">
-            <h2 class="cta-title">まずは、実際の操作感をお試しください</h2>
-            <p class="cta-text">インストール・アカウント登録不要。ブラウザですぐに機能をご体験いただけます。</p>
-            <div class="cta-buttons">
-                <a href="admin.html" class="btn btn-white btn-lg">管理画面デモを開く</a>
-                <a href="index.html" class="btn btn-outline-white btn-lg">お客様用予約デモを開く</a>
+    <!-- ==================== -->
+    <!-- ⑤ 利用の流れ          -->
+    <!-- ==================== -->
+    <section class="flow" id="flow">
+        <div class="container">
+            <h2 class="section-title">導入はかんたん3ステップ</h2>
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="step-circle">1</div>
+                    <div class="step-icon">📝</div>
+                    <h3 class="step-title">お申し込み</h3>
+                    <p class="step-desc">フォームからお申し込み。最短当日にアカウントを発行します。</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="step-circle">2</div>
+                    <div class="step-icon">⚙️</div>
+                    <h3 class="step-title">初期設定</h3>
+                    <p class="step-desc">メニュー・営業時間・スタッフ情報を登録。テンプレート付きで迷いません。</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="step-circle">3</div>
+                    <div class="step-icon">🎉</div>
+                    <h3 class="step-title">運用開始</h3>
+                    <p class="step-desc">予約ページのURLをSNSやLINEに貼るだけ。すぐに予約受付が始まります。</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ==================== -->
+    <!-- ⑥ 導入効果・お客様の声 -->
+    <!-- ==================== -->
+    <section class="social-proof" id="social-proof">
+        <div class="container">
+            <h2 class="section-title">導入サロンの変化</h2>
+
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-number">-80<small>%</small></div>
+                    <div class="stat-label">予約対応時間</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">+30<small>%</small></div>
+                    <div class="stat-label">リピート率</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">+45<small>%</small></div>
+                    <div class="stat-label">営業時間外の予約</div>
+                </div>
+            </div>
+            <p class="stats-note">※当社シミュレーションによる想定値です</p>
+
+            <div class="voice-cards">
+                <div class="voice-card">
+                    <p class="voice-text">「1人で運営しているので、施術中の電話が本当にストレスでした。導入してからは予約がすべてオンラインで入るので、施術に100%集中できるようになりました。」
+                    </p>
+                    <p class="voice-author">── 東京都 個人サロンオーナー A様</p>
+                </div>
+                <div class="voice-card">
+                    <p class="voice-text">「リピーターのお客様が"予約がラクになった"と喜んでくれて、再来店率が明らかに上がりました。」</p>
+                    <p class="voice-author">── 大阪府 ネイルサロン経営 B様</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- ⑦ 料金プラン          -->
+    <!-- ==================== -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title">料金プラン</h2>
+            <div class="pricing-grid">
+                <!-- 無料プラン -->
+                <div class="price-card">
+                    <div class="price-card-head">
+                        <h3 class="plan-name">無料プラン</h3>
+                        <div class="plan-price">¥0<small>/月</small></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li>月間予約数 30件まで</li>
+                        <li>スタッフ 1名</li>
+                        <li>基本予約機能</li>
+                    </ul>
+                    <a href="admin.html" class="btn btn-outline-cta">無料で始める</a>
+                </div>
+                <!-- スタンダードプラン -->
+                <div class="price-card recommended">
+                    <div class="recommend-label">おすすめ</div>
+                    <div class="price-card-head">
+                        <h3 class="plan-name">スタンダードプラン</h3>
+                        <div class="plan-price">¥3,980<small>/月（税込）</small></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li>月間予約数 無制限</li>
+                        <li>スタッフ 5名まで</li>
+                        <li>顧客管理機能</li>
+                        <li>メール通知機能</li>
+                    </ul>
+                    <a href="admin.html" class="btn btn-cta">このプランで始める</a>
+                </div>
+                <!-- プレミアムプラン -->
+                <div class="price-card">
+                    <div class="price-card-head">
+                        <h3 class="plan-name">プレミアムプラン</h3>
+                        <div class="plan-price">¥9,800<small>/月（税込）</small></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li>全機能利用可能</li>
+                        <li>スタッフ 無制限</li>
+                        <li>優先サポート</li>
+                        <li>カスタムドメイン対応</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline-cta">お問い合わせ</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- ⑧ よくある質問        -->
+    <!-- ==================== -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2 class="section-title">よくある質問</h2>
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary class="faq-q">パソコンが苦手でも使えますか？</summary>
+                    <div class="faq-a">はい。スマートフォンだけですべての操作が完結します。管理画面もシンプルな設計なので、機械が苦手な方でも安心です。</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">既存のお客様の情報は移行できますか？</summary>
+                    <div class="faq-a">はい。CSVファイルでの一括インポートに対応しています。個別に手入力していただくことも可能です。</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">予約が入ったらどうやって通知されますか？</summary>
+                    <div class="faq-a">ご登録のメールアドレスに即時通知が届きます。管理画面からもリアルタイムで予約状況を確認できます。</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">途中で解約できますか？</summary>
+                    <div class="faq-a">はい。いつでも解約可能で、解約金等は一切かかりません。</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">HotPepper Beautyなどの他サービスとの違いは？</summary>
+                    <div class="faq-a">本システムは外部の集客プラットフォームではなく、サロン様専用の予約・顧客管理ツールです。手数料なし・顧客データは100%サロン様のものとして管理できます。
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- ⑨ 最終CTA            -->
+    <!-- ==================== -->
+    <section class="final-cta">
+        <div class="container">
+            <h2 class="final-cta-title">まずは無料で、試してみませんか？</h2>
+            <p class="final-cta-sub">登録不要、30秒でデモ画面を体験できます。</p>
+            <a href="index.html" class="btn btn-white-cta btn-lg">デモを体験する →</a>
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- ⑩ フッター            -->
+    <!-- ==================== -->
     <footer class="footer">
-        <div class="footer-inner">
-            <div class="logo">Beauty Reserve</div>
+        <div class="container">
+            <div class="footer-logo">Beauty Reserve</div>
+            <p class="footer-demo-note">※本サイトはデモサイトです。お客様の声は導入イメージです。</p>
             <p class="footer-copy">&copy; 2026 Beauty Reserve. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Simple mobile menu toggle
-        const menuToggle = document.querySelector('.menu-toggle');
-        const nav = document.querySelector('.nav');
-        
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
+        // Mobile menu toggle
+        const toggle = document.getElementById('menu-toggle');
+        const nav = document.getElementById('nav');
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('active');
             nav.classList.toggle('active');
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // close mobile menu
+                    toggle.classList.remove('active');
+                    nav.classList.remove('active');
+                }
+            });
         });
     </script>
 </body>
+
 </html>
