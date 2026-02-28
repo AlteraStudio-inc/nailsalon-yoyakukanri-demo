@@ -1384,3 +1384,23 @@ details[open] .faq-q::after {
 @media (max-width: 768px) {
     .showcase-inner { flex-direction: column; text-align: center; }
 }
+
+/* --- Mobile Fix for Mobile Admin Showcase --- */
+@media (max-width: 900px) {
+    .showcase-mobile-mockup {
+        margin: 0 auto;
+        transform: scale(0.9);
+        transform-origin: top center;
+    }
+    .feature-row, .feature-row.reverse {
+        gap: 40px !important;
+    }
+    .feature-image {
+        width: 100%;
+    }
+}
+@media (max-width: 480px) {
+    .showcase-mobile-mockup {
+        transform: scale(0.85);
+    }
+}
