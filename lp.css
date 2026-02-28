@@ -1241,3 +1241,146 @@ details[open] .faq-q::after {
         font-size: 24px;
     }
 }
+/* ================================
+   11. Added Content (Mobile Admin, Comparison, FAQ)
+   ================================ */
+
+/* --- Mobile Admin Showcase --- */
+.mobile-admin-showcase {
+    padding: 80px 0;
+    background: #FFF0F2;
+}
+.showcase-inner {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+.showcase-text {
+    flex: 1;
+}
+.showcase-visual {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+.showcase-mobile-mockup {
+    width: 260px;
+    height: 520px;
+    background: var(--bg-gray);
+    border-radius: 32px;
+    box-shadow: var(--shadow-lg);
+    border: 8px solid #333;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.mock-admin-header {
+    background: #2C2C2C;
+    color: #fff;
+    padding: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+}
+.mock-admin-body {
+    padding: 16px;
+    flex: 1;
+    overflow-y: hidden;
+}
+.mock-kpi-card {
+    background: #fff;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 12px;
+    border-left: 4px solid var(--primary);
+}
+.mock-kpi-title { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+.mock-kpi-val { font-size: 18px; font-weight: 700; color: var(--text-heading); }
+.mock-list-item {
+    background: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+}
+
+/* --- Comparison Table --- */
+.comparison {
+    padding: 100px 0;
+    background: var(--bg-white);
+}
+.comp-table-wrap {
+    overflow-x: auto;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    margin: 40px auto 0;
+}
+.comparison-table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+    text-align: center;
+}
+.comparison-table th, .comparison-table td {
+    padding: 16px;
+    border: 1px solid var(--border);
+    vertical-align: middle;
+}
+.comparison-table th {
+    background: var(--bg-gray);
+    font-weight: 700;
+    color: var(--text-heading);
+}
+.comparison-table .col-our {
+    background: #FFF5F6;
+    border: 2px solid var(--cta);
+    position: relative;
+}
+.comparison-table th.col-our {
+    color: var(--cta);
+    font-size: 18px;
+    border-bottom: none;
+}
+.comparison-table td.col-our {
+    border-top: none;
+    border-bottom: 2px solid var(--cta);
+}
+.comparison-table tr:not(:last-child) td.col-our {
+    border-bottom: 1px solid var(--border);
+}
+
+.comp-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--cta);
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.mark-o { color: var(--cta); font-weight: 900; font-size: 20px; }
+.mark-x { color: var(--text-muted); font-size: 16px; }
+.mark-tri { color: #f5a623; font-weight: 700; font-size: 18px; }
+
+/* --- Microcopies --- */
+.microcopy {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    display: inline-block;
+}
+
+@media (max-width: 768px) {
+    .showcase-inner { flex-direction: column; text-align: center; }
+}
