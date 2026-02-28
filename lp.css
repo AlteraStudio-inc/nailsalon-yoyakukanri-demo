@@ -7,9 +7,9 @@
     --primary: #D4A5A5;
     /* くすみピンク（信頼感） */
     --primary-dark: #C08E8E;
-    --cta: #FF6B35;
+    --cta: #FF7B9C;
     /* オレンジ（CTAボタン用） */
-    --cta-hover: #E85A25;
+    --cta-hover: #E95A7E;
     --text-heading: #1A1A1A;
     --text-body: #4A4A4A;
     --text-muted: #9B9B9B;
@@ -94,7 +94,7 @@ ul {
     background: var(--cta-hover);
     border-color: var(--cta-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.35);
+    box-shadow: 0 4px 12px rgba(255, 123, 156, 0.35);
 }
 
 .btn-outline-cta {
@@ -104,7 +104,7 @@ ul {
 }
 
 .btn-outline-cta:hover {
-    background: rgba(255, 107, 53, 0.06);
+    background: rgba(255, 123, 156, 0.06);
 }
 
 .btn-white-cta {
@@ -322,7 +322,7 @@ ul {
 
 .phone-menu-item.active {
     border-color: var(--cta);
-    background: rgba(255, 107, 53, 0.05);
+    background: rgba(255, 123, 156, 0.05);
 }
 
 .phone-menu-dot {
@@ -597,7 +597,7 @@ ul {
 }
 
 .cal-grid .avail:hover {
-    background: rgba(255, 107, 53, 0.1);
+    background: rgba(255, 123, 156, 0.1);
 }
 
 .cal-grid .selected {
@@ -917,7 +917,7 @@ ul {
 .price-card.recommended {
     transform: scale(1.05);
     border-color: var(--cta);
-    box-shadow: 0 8px 30px rgba(255, 107, 53, 0.15);
+    box-shadow: 0 8px 30px rgba(255, 123, 156, 0.15);
     z-index: 1;
 }
 
