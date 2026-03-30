@@ -8,25 +8,25 @@
         reservations: 'br_reservations', notificationQueue: 'br_notificationQueue',
         lastCustomer: 'br_lastCustomer', notifDismissed: 'br_notifDismissed',
         inAppNotifications: 'br_inAppNotifications', loggedInUser: 'br_loggedInUser',
-        staffs: 'br_staffs'
+        staffs: 'br_staffs', gallery: 'br_gallery', themeColors: 'br_themeColors'
     };
     const DAY_NAMES = ['日', '月', '火', '水', '木', '金', '土'];
     const DEFAULT_SHOP = {
-        name: 'Nail Salon テスト', address: '東京都新宿区西新宿3-4-5 テストビル1F',
+        name: 'Hair Salon テスト', address: '東京都新宿区西新宿3-4-5 テストビル1F',
         phone: '000-1234-5678', hours: '10:00〜20:00（最終受付 19:00）',
         holidays: '毎週火曜日', rules: 'キャンセルの際は事前にご連絡ください'
     };
     const DEFAULT_MENUS = [
-        { id: 'm1', name: 'デザインネイル', description: 'トレンドのデザインを取り入れたアートネイル。', price: 8800, duration: 90, popular: true },
-        { id: 'm2', name: '長さだし', description: 'スカルプチュアで理想の長さに。', price: 12000, duration: 120, popular: false },
-        { id: 'm3', name: 'ワンカラー', description: 'シンプルで上品なワンカラー仕上げ。', price: 5500, duration: 60, popular: true },
-        { id: 'm4', name: 'メンズネイルケア', description: '男性向けの爪のお手入れ。', price: 4500, duration: 45, popular: false },
-        { id: 'm5', name: 'カラーグラデーション', description: '自然なグラデーションで指先を美しく。', price: 7500, duration: 90, popular: false }
+        { id: 'm1', name: 'カット+カラー', description: 'トレンドカラーとスタイリッシュなカットのセット。', price: 9800, duration: 120, popular: true },
+        { id: 'm2', name: 'デザインカラー(ダブル)', description: 'ハイライト・バレイヤージュなど立体感のあるカラー。', price: 13000, duration: 150, popular: false },
+        { id: 'm3', name: 'カットのみ', description: '骨格・髪質に合わせた似合わせカット。', price: 5500, duration: 60, popular: true },
+        { id: 'm4', name: 'メンズカット', description: 'メンズスタイルに特化したカット。', price: 4500, duration: 45, popular: false },
+        { id: 'm5', name: 'トリートメント+ヘッドスパ', description: '集中補修トリートメントと癒しのヘッドスパ。', price: 7500, duration: 75, popular: false }
     ];
     const DEFAULT_STAFFS = [
-        { id: 's1', name: 'MINAMI', image: 'https://i.pravatar.cc/150?img=47', fee: 500, description: 'トレンドアートが得意です！' },
-        { id: 's2', name: 'YUKA', image: 'https://i.pravatar.cc/150?img=32', fee: 300, description: '丁寧なケアを心がけています。' },
-        { id: 's3', name: 'AI', image: 'https://i.pravatar.cc/150?img=26', fee: 0, description: 'シンプル綺麗なデザインはお任せください。' }
+        { id: 's1', name: 'MINAMI', image: 'https://i.pravatar.cc/150?img=47', fee: 500, description: '透明感カラーが得意です！' },
+        { id: 's2', name: 'YUKA', image: 'https://i.pravatar.cc/150?img=32', fee: 300, description: 'ナチュラルな似合わせカットが好評です。' },
+        { id: 's3', name: 'AI', image: 'https://i.pravatar.cc/150?img=26', fee: 0, description: 'メンズカット・パーマはお任せください。' }
     ];
     const DEFAULT_SETTINGS = { openTime: '10:00', closeTime: '20:00', holidays: [2], slotMinutes: 30, maxDays: 60 };
 
@@ -36,14 +36,67 @@
         adminFilter: 'all', adminSearch: '', nextBookingData: null, lastReservation: null
     };
 
-    const gallery = [
-        { id: 'g1', title: 'オフィスシンプル', img: 'https://placehold.co/300x300/ffeeee/ff6b81?text=Simple', menuId: 'm3', desc: '肌馴染みの良いピンクベージュのワンカラー。オフィスに最適です。' },
-        { id: 'g2', title: '大人ニュアンス', img: 'https://placehold.co/300x300/e0f7fa/00bcd4?text=Nuance', menuId: 'm1', desc: 'くすみカラーとゴールドを組み合わせた、トレンドのニュアンスネイル。' },
-        { id: 'g3', title: '王道フレンチ', img: 'https://placehold.co/300x300/fff3e0/ff9800?text=French', menuId: 'm1', desc: '指先が綺麗に見える、ホワイトのフレンチネイル。' },
-        { id: 'g4', title: '華やかアート', img: 'https://placehold.co/300x300/f3e5f5/9c27b0?text=Art', menuId: 'm1', desc: 'ストーンやパーツをふんだんに使ったゴージャスなデザイン。' },
-        { id: 'g5', title: '季節の限定', img: 'https://placehold.co/300x300/e8f5e9/4caf50?text=Season', menuId: 'm1', desc: '今の季節にぴったりの限定カラーとアート。' },
-        { id: 'g6', title: 'マットクール', img: 'https://placehold.co/300x300/eceff1/607d8b?text=Matte', menuId: 'm3', desc: 'マットコート仕上げのクールなワンカラー。' }
+    const DEFAULT_GALLERY = [
+        { id: 'g1', title: 'ナチュラルボブ', img: 'https://placehold.co/300x300/F6F1EB/C47D8C?text=Bob', menuId: 'm3', desc: '柔らかな質感の大人ナチュラルボブ。オフィスにも最適。' },
+        { id: 'g2', title: '透明感カラー', img: 'https://placehold.co/300x300/ECD4D9/A56070?text=Color', menuId: 'm1', desc: 'ブリーチなしで叶える透け感のあるアッシュベージュ。' },
+        { id: 'g3', title: 'ハイライトバレイヤージュ', img: 'https://placehold.co/300x300/C4DAC5/5A8060?text=Balayage', menuId: 'm2', desc: '立体感のある外国人風ハイライトカラー。' },
+        { id: 'g4', title: 'ゆるふわウェーブ', img: 'https://placehold.co/300x300/ECD4D9/C47D8C?text=Wave', menuId: 'm1', desc: 'コテで作る柔らかなウェーブスタイル。' },
+        { id: 'g5', title: '季節のトレンド', img: 'https://placehold.co/300x300/C4DAC5/7B9E7E?text=Trend', menuId: 'm1', desc: '今季おすすめのカラー＆スタイル。' },
+        { id: 'g6', title: 'メンズショート', img: 'https://placehold.co/300x300/CFBFB4/28201A?text=Mens', menuId: 'm4', desc: 'すっきり爽やかなメンズショートスタイル。' }
     ];
+
+    function getGallery() {
+        const g = lsGet(LS_KEYS.gallery);
+        return g && g.length > 0 ? g : DEFAULT_GALLERY;
+    }
+
+    function applyDynamicTheme() {
+        const theme = lsGet(LS_KEYS.themeColors);
+        if (!theme) return;
+        
+        function hexToRgb(h) {
+            let r = 0, g = 0, b = 0;
+            if (h.length === 4) { r = parseInt(h[1]+h[1], 16); g = parseInt(h[2]+h[2], 16); b = parseInt(h[3]+h[3], 16); }
+            else if (h.length === 7) { r = parseInt(h[1]+h[2], 16); g = parseInt(h[3]+h[4], 16); b = parseInt(h[5]+h[6], 16); }
+            return [r, g, b];
+        }
+        function rgbToHex(r,g,b) {
+            return "#" + ((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1).toUpperCase();
+        }
+        function mix(rgb1, rgb2, weight) {
+            const w1 = weight; const w2 = 1 - weight;
+            return [Math.round(rgb1[0]*w1 + rgb2[0]*w2), Math.round(rgb1[1]*w1 + rgb2[1]*w2), Math.round(rgb1[2]*w1 + rgb2[2]*w2)];
+        }
+        
+        try {
+            const pRgb = hexToRgb(theme.primary);
+            const pDark = rgbToHex(...mix(pRgb, [0,0,0], 0.8));
+            const pLight = rgbToHex(...mix(pRgb, [255,255,255], 0.2));
+            const pGrad = `linear-gradient(135deg, ${theme.primary} 0%, ${rgbToHex(...mix(pRgb, [255,255,255], 0.7))} 100%)`;
+
+            const aRgb = hexToRgb(theme.accent);
+            const aLight = rgbToHex(...mix(aRgb, [255,255,255], 0.3));
+
+            let style = document.getElementById('dynamic-theme');
+            if (!style) {
+                style = document.createElement('style');
+                style.id = 'dynamic-theme';
+                document.head.appendChild(style);
+            }
+            style.textContent = `
+                :root {
+                    --primary: ${theme.primary};
+                    --primary-dark: ${pDark};
+                    --primary-light: ${pLight};
+                    --primary-gradient: ${pGrad};
+                    --accent: ${theme.accent};
+                    --accent-light: ${aLight};
+                }
+            `;
+        } catch(e) {}
+    }
+
+    applyDynamicTheme();
 
     // ── Helpers ──
     function lsGet(k) {
@@ -145,22 +198,71 @@
         $('shop-rules').textContent = shop.rules;
         const list = $('menu-list'); list.innerHTML = '';
         menus.forEach(m => {
-            const card = document.createElement('div'); card.className = 'menu-card';
-            card.innerHTML = `<div class="menu-card-top"><span class="menu-name">${esc(m.name)}</span>
-        ${m.popular ? '<span class="popular-badge">🔥 人気</span>' : ''}</div>
+            const card = document.createElement('div'); card.className = 'menu-card fade-in-up';
+            const imgHtml = m.image ? `<img src="${esc(m.image)}" alt="${esc(m.name)}" style="width:100px; height:80px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--border); float:right; margin-left:12px; margin-bottom:12px;">` : '';
+            card.innerHTML = `${imgHtml}<div class="menu-card-top"><span class="menu-name">${esc(m.name)}</span>
+        ${m.popular ? '<span class="popular-badge">人気</span>' : ''}</div>
         <p class="menu-desc">${esc(m.description)}</p>
-        <div class="menu-meta"><span class="menu-duration">⏱ ${m.duration}分</span><span class="menu-price">${formatPrice(m.price)}</span></div>
-        <button class="btn-select-menu" data-menu-id="${m.id}">このメニューを選ぶ</button>`;
+        <div class="menu-meta" style="clear:both;"><span class="menu-duration">所要時間: ${m.duration}分</span><span class="menu-price">${formatPrice(m.price)}</span></div>
+        <button class="btn-select-menu" style="clear:both;" data-menu-id="${m.id}">このメニューを選ぶ</button>`;
             list.appendChild(card);
         });
+
+        const historySec = $('recent-history-section');
+        const user = lsGet(LS_KEYS.loggedInUser);
+        if (historySec) {
+            if (user) {
+                const reservations = (lsGet(LS_KEYS.reservations) || [])
+                    .filter(r => r.customerName === user.name && r.customerPhone.replace(/[-\s]/g, '') === user.phone.replace(/[-\s]/g, ''))
+                    .filter(r => r.status === 'completed' || r.status === 'booked')
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                const uniqueRes = [];
+                const seenPairs = new Set();
+                for (const r of reservations) {
+                    const key = r.menuId + '_' + (r.staffId || 'none');
+                    if (!seenPairs.has(key)) {
+                        seenPairs.add(key);
+                        uniqueRes.push(r);
+                        if (uniqueRes.length >= 5) break; 
+                    }
+                }
+                
+                if (uniqueRes.length > 0) {
+                    historySec.style.display = 'block';
+                    const carousel = $('history-carousel');
+                    const staffs = lsGet(LS_KEYS.staffs) || [];
+                    carousel.innerHTML = uniqueRes.map(r => {
+                        const staff = r.staffId ? staffs.find(s => s.id === r.staffId) : null;
+                        const staffName = staff ? staff.name : (r.staffId ? '退職済' : 'なし');
+                        return `
+                            <div class="history-carousel-card">
+                                <div class="history-carousel-header">
+                                    <span class="history-date">${formatDate(r.date)}</span>
+                                </div>
+                                <div class="history-content">
+                                    <span class="history-menu-name">${esc(r.menuName)}</span>
+                                    <span class="history-staff-name">指名: ${esc(staffName)}</span>
+                                </div>
+                                <button type="button" class="btn-rebook" data-menu-id="${r.menuId}" data-staff-id="${r.staffId || ''}">同じメニューで予約</button>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    historySec.style.display = 'none';
+                }
+            } else {
+                historySec.style.display = 'none';
+            }
+        }
     }
 
     function renderStaffsForCustomer() {
-        $('selected-menu-for-staff').textContent = `💅 ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}`;
+        $('selected-menu-for-staff').textContent = `${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}`;
         const staffs = lsGet(LS_KEYS.staffs) || [];
         const grid = $('staff-selection-grid');
         grid.innerHTML = staffs.map(s => `
-            <div class="staff-selection-card">
+            <div class="staff-selection-card fade-in-up">
                 <img src="${esc(s.image || 'https://i.pravatar.cc/150')}" alt="${esc(s.name)}" class="staff-selection-avatar" loading="lazy">
                 <div class="staff-selection-info">
                     <div class="staff-selection-name">${esc(s.name)}</div>
@@ -170,6 +272,32 @@
                 <button type="button" class="btn-select-staff" data-id="${s.id}" data-fee="${s.fee}" data-name="${esc(s.name)}">指名する</button>
             </div>
         `).join('');
+    }
+
+    function renderGalleryGrid() {
+        const grid = $('gallery-grid');
+        if (!grid) return;
+        
+        // Ensure the grid has proper grid layout styling since we dynamically restored it
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(140px, 1fr))';
+        grid.style.gap = '16px';
+        grid.style.padding = '16px';
+        
+        const menus = lsGet(LS_KEYS.menus) || [];
+        grid.innerHTML = getGallery().map(g => {
+            const m = menus.find(x => x.id === g.menuId);
+            return `
+            <div class="gallery-card fade-in-up" data-id="${g.id}" style="cursor:pointer;">
+                <img src="${esc(g.img)}" alt="${esc(g.title)}" class="gallery-img" style="width:100%; height:200px; object-fit:cover; border-radius:var(--radius-sm) var(--radius-sm) 0 0;">
+                <div class="gallery-card-body" style="padding:12px; border:1px solid var(--border); border-top:none; border-radius:0 0 var(--radius-sm) var(--radius-sm);">
+                    <h3 class="gallery-card-title" style="font-size:14px; margin-bottom:4px;">${esc(g.title)}</h3>
+                    <p class="gallery-card-desc" style="font-size:12px; color:var(--text-light); margin-bottom:8px;">${esc(g.desc || '')}</p>
+                    ${m ? `<span class="gallery-card-menu" style="font-size:11px; padding:2px 8px; background:var(--bg-main); border-radius:4px;">${esc(m.name)}</span>` : ''}
+                </div>
+            </div>
+            `;
+        }).join('');
     }
 
     // ── Render: Week Grid (HPB style) ──
@@ -284,9 +412,9 @@
 
         let staffFeeStr = '';
         if (state.selectedStaff && state.selectedStaff.id) {
-            staffFeeStr = `👤 指名スタッフ: ${state.selectedStaff.name} (指名料: ${formatPrice(state.selectedStaff.fee)})`;
+            staffFeeStr = `指名スタッフ: ${state.selectedStaff.name} (指名料: ${formatPrice(state.selectedStaff.fee)})`;
         } else {
-            staffFeeStr = `👤 指名スタッフ: なし`;
+            staffFeeStr = `指名スタッフ: なし`;
         }
         $('confirm-staff').textContent = staffFeeStr;
 
@@ -347,9 +475,9 @@
     function renderDone() {
         const r = state.lastReservation;
         $('done-summary').innerHTML = `<strong>${esc(r.menuName)}</strong><br>
-      📅 ${formatDate(r.date)}<br>🕐 ${r.startTime}〜${r.endTime}<br>
-      👤 ${esc(r.customerName)}<br>📞 ${esc(r.customerPhone)}
-      ${r.note ? '<br>📝 ' + esc(r.note) : ''}`;
+      ${formatDate(r.date)}<br>${r.startTime}〜${r.endTime}<br>
+      氏名: ${esc(r.customerName)}<br>電話番号: ${esc(r.customerPhone)}
+      ${r.note ? '<br>備考: ' + esc(r.note) : ''}`;
 
         // Confetti
         const colors = ['#ff6b81', '#ffc107', '#2196f3', '#4caf50', '#e91e63'];
@@ -458,8 +586,8 @@
             const card = document.createElement('div'); card.className = 'mypage-res-card';
             card.innerHTML = `<div class="mypage-res-top"><span class="mypage-res-menu">${esc(r.menuName)}</span>
         <span class="status-badge status-${r.status}">${statusLabel[r.status]}</span></div>
-        <div class="mypage-res-info">📅 ${formatDate(r.date)}　${r.startTime}〜${r.endTime}<br>
-        💰 ${formatPrice(r.price)}　⏱ ${r.durationMinutes}分${r.note ? '<br>📝 ' + esc(r.note) : ''}</div>
+        <div class="mypage-res-info">${formatDate(r.date)}　${r.startTime}〜${r.endTime}<br>
+        ${formatPrice(r.price)}　所要時間: ${r.durationMinutes}分${r.note ? '<br>備考: ' + esc(r.note) : ''}</div>
         <div style="text-align:right;margin-top:8px;font-size:12px;color:var(--primary-color)">詳細・変更 &gt;</div>`;
             card.onclick = () => showUserResDetail(r.reservationId);
             list.appendChild(card);
@@ -470,7 +598,7 @@
     function renderGallery() {
         const grid = $('gallery-grid'); grid.innerHTML = '';
         gallery.forEach(item => {
-            const el = document.createElement('div'); el.className = 'gallery-item';
+            const el = document.createElement('div'); el.className = 'gallery-item fade-in-up';
             el.innerHTML = `<img src="${item.img}" class="gallery-img"><div class="gallery-info">${item.title}</div>`;
             el.onclick = () => showGalleryDetail(item);
             grid.appendChild(el);
@@ -493,7 +621,7 @@
             $('modal-overlay').classList.add('hidden');
             state.selectedMenu = menu; state.selectedDate = null; state.selectedTime = null;
             const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
-            $('selected-menu-summary').textContent = `💅 ${menu.name}　${formatPrice(menu.price)}`;
+            $('selected-menu-summary').textContent = `${menu.name}　${formatPrice(menu.price)}`;
             renderWeekGrid(); navigate('datetime');
         };
         actions.appendChild(btn);
@@ -551,7 +679,7 @@
             const menu = menus.find(m => m.id === r.menuId);
             state.selectedMenu = menu; state.selectedDate = null; state.selectedTime = null;
             state.customerInfo = { name: r.customerName, phone: r.customerPhone, email: r.customerEmail };
-            $('selected-menu-summary').textContent = `💅 ${menu.name}　${formatPrice(menu.price)}`;
+            $('selected-menu-summary').textContent = `✂️ ${menu.name}　${formatPrice(menu.price)}`;
             $('input-email').value = state.customerInfo.email || '';
             renderWeekGrid(); navigate('datetime');
             showToast('日時を選択し直してください', 'info');
@@ -578,7 +706,7 @@
             const card = document.createElement('div'); card.className = 'admin-res-card'; card.dataset.resId = r.reservationId;
             card.innerHTML = `<div class="admin-res-top"><span class="admin-res-name">${esc(r.customerName)}</span>
         <span class="status-badge status-${r.status}">${statusLabel[r.status]}</span></div>
-        <div class="admin-res-info">💅 ${esc(r.menuName)}<br>📅 ${formatDate(r.date)}　${r.startTime}〜${r.endTime}</div>`;
+        <div class="admin-res-info">✂️ ${esc(r.menuName)}<br>📅 ${formatDate(r.date)}　${r.startTime}〜${r.endTime}</div>`;
             list.appendChild(card);
         });
     }
@@ -728,7 +856,7 @@
         state.selectedMenu = menu; state.selectedDate = nd.suggestedDate; state.selectedTime = nd.suggestedTime;
         state.customerInfo = { name: nd.customerName || '', phone: nd.customerPhone || '', email: nd.customerEmail || '' };
         state.note = ''; state.nextBookingData = nd;
-        $('selected-menu-summary').textContent = `💅 ${menu.name}　${formatPrice(menu.price)}`;
+        $('selected-menu-summary').textContent = `${menu.name}　${formatPrice(menu.price)}`;
         // Name & Phone inputs removed
         $('input-email').value = state.customerInfo.email || '';
         navigate('info'); showToast('前回の情報を復元しました。', 'success');
@@ -775,7 +903,7 @@
             if (userRes.length === 0) {
                 const past = new Date(); past.setMonth(past.getMonth() - 1);
                 const pastRes = {
-                    reservationId: uid(), menuId: 'm1', menuName: 'デザインネイル(仮)', durationMinutes: 90, price: 8800,
+                    reservationId: uid(), menuId: 'm1', menuName: 'カット+カラー(仮)', durationMinutes: 120, price: 9800,
                     staffId: 's1', staffFee: 500,
                     date: dateStr(past), startTime: '10:00', endTime: '11:30',
                     customerName: name, customerPhone: phone, customerEmail: 'test@example.com',
@@ -807,6 +935,42 @@
         });
         // Admin (hidden, via hash)
         $('btn-back-admin').addEventListener('click', () => { navigate('top'); renderTop(); });
+        
+        // Gallery
+        const btnToGallery = $('btn-to-gallery');
+        if (btnToGallery) {
+            btnToGallery.addEventListener('click', () => {
+                navigate('gallery');
+                renderGalleryGrid();
+            });
+        }
+        const btnBackGallery = $('btn-back-gallery');
+        if (btnBackGallery) {
+            btnBackGallery.addEventListener('click', () => {
+                navigate('top'); renderTop();
+            });
+        }
+        
+        const galleryGrid = $('gallery-grid');
+        if (galleryGrid) {
+            galleryGrid.addEventListener('click', e => {
+                const card = e.target.closest('.gallery-card'); if (!card) return;
+                const g = getGallery().find(x => x.id === card.dataset.id);
+                if (!g) return;
+                // Pre-select menu if exists
+                if (g.menuId) {
+                    const menus = lsGet(LS_KEYS.menus);
+                    const menu = menus.find(m => m.id === g.menuId);
+                    if (menu) {
+                        state.selectedMenu = menu;
+                        state.selectedStaff = null;
+                        state.selectedDate = null; state.selectedTime = null;
+                        renderStaffsForCustomer(); navigate('staff');
+                    }
+                }
+            });
+        }
+
         // Menu selection
         $('menu-list').addEventListener('click', e => {
             const btn = e.target.closest('.btn-select-menu'); if (!btn) return;
@@ -816,6 +980,46 @@
             state.selectedDate = null; state.selectedTime = null;
             renderStaffsForCustomer(); navigate('staff');
         });
+
+        // History rebook
+        const historySecEvents = $('recent-history-section');
+        if (historySecEvents) {
+            historySecEvents.addEventListener('click', e => {
+                const btn = e.target.closest('.btn-rebook'); if (!btn) return;
+                const menus = lsGet(LS_KEYS.menus) || [];
+                const staffs = lsGet(LS_KEYS.staffs) || [];
+                
+                const menu = menus.find(m => m.id === btn.dataset.menuId);
+                if (!menu) { showToast('このメニューは現在ご利用できません', 'error'); return; }
+                
+                state.selectedMenu = menu;
+                state.selectedDate = null; state.selectedTime = null;
+                
+                const staffId = btn.dataset.staffId;
+                if (staffId && staffId !== 'null') {
+                    const staff = staffs.find(s => s.id === staffId);
+                    if (staff) {
+                        state.selectedStaff = { id: staff.id, name: staff.name, fee: staff.fee };
+                    } else {
+                        state.selectedStaff = { id: null, name: '指名なし', fee: 0 };
+                    }
+                } else {
+                    state.selectedStaff = { id: null, name: '指名なし', fee: 0 };
+                }
+                
+                const user = lsGet(LS_KEYS.loggedInUser);
+                if (user) {
+                    const lastCustomer = lsGet(LS_KEYS.lastCustomer) || {};
+                    state.customerInfo = { name: user.name, phone: user.phone, email: lastCustomer.email || '', gender: lastCustomer.gender || '', visitType: lastCustomer.visitType || '' };
+                }
+                
+                let staffFeePrice = state.selectedStaff.fee > 0 ? formatPrice(state.selectedStaff.fee) : '無料';
+                $('selected-menu-summary').innerHTML = `${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>指名: ${state.selectedStaff.name} (${staffFeePrice})`;
+                
+                const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
+                renderWeekGrid(); navigate('datetime');
+            });
+        }
         // Staff selection
         $('btn-back-staff').addEventListener('click', () => { navigate('top'); });
         $('staff-selection-grid').addEventListener('click', e => {
@@ -824,13 +1028,13 @@
             const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
             let staffFeePrice = formatPrice(state.selectedStaff.fee);
             if (state.selectedStaff.fee === 0) staffFeePrice = '無料';
-            $('selected-menu-summary').innerHTML = `💅 ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>👤 指名: ${state.selectedStaff.name} (${staffFeePrice})`;
+            $('selected-menu-summary').innerHTML = `${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>指名: ${state.selectedStaff.name} (${staffFeePrice})`;
             renderWeekGrid(); navigate('datetime');
         });
         $('btn-staff-none').addEventListener('click', () => {
             state.selectedStaff = { id: null, name: '指名なし', fee: 0 };
             const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
-            $('selected-menu-summary').innerHTML = `💅 ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>👤 指名: なし`;
+            $('selected-menu-summary').innerHTML = `${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>指名: なし`;
             renderWeekGrid(); navigate('datetime');
         });
         // Week nav
@@ -872,9 +1076,8 @@
         });
         $('input-note').addEventListener('input', () => { $('note-char-count').textContent = $('input-note').value.length; });
         $('btn-note-next').addEventListener('click', () => { state.note = $('input-note').value.trim(); renderConfirm(); navigate('confirm'); });
-        // Confirm
         $('btn-confirm-submit').addEventListener('click', () => {
-            if (saveReservation()) { renderDone(); navigate('done'); showToast('ご予約ありがとうございます！🎉', 'success'); }
+            if (saveReservation()) { renderDone(); navigate('done'); showToast('ご予約ありがとうございます！', 'success'); }
         });
         // Done
         $('btn-back-top').addEventListener('click', () => {
@@ -917,13 +1120,11 @@
             showToast('設定を保存しました', 'success');
         });
 
-        // Gallery Events
-        $('btn-to-gallery').addEventListener('click', () => { renderGallery(); navigate('gallery'); });
-        $('btn-back-gallery').addEventListener('click', () => { navigate('top'); renderTop(); });
+        // Gallery Events (Removed duplicate bindings due to RefError)
         $('btn-allow-notification').addEventListener('click', () => {
             if ('Notification' in window) Notification.requestPermission().then(p => {
                 $('notification-banner').classList.add('hidden');
-                if (p === 'granted') showToast('通知を許可しました 🔔', 'success');
+                if (p === 'granted') showToast('通知を許可しました', 'success');
             });
         });
         $('btn-dismiss-notification').addEventListener('click', () => {
@@ -937,11 +1138,38 @@
 
     function checkHash() { if (location.hash === '#admin') { navigate('admin'); renderAdmin(); } }
 
+    function applyScrollAnimation() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Stop observing once visible if you only want it to fade in once
+                    // observer.unobserve(entry.target); 
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        
+        const mo = new MutationObserver(mutations => {
+            mutations.forEach(m => {
+                m.addedNodes.forEach(n => {
+                    if (n.nodeType === 1) {
+                        if (n.classList.contains('fade-in-up')) observer.observe(n);
+                        n.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+                    }
+                });
+            });
+        });
+        mo.observe(document.body, { childList: true, subtree: true });
+        
+        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+    }
+
     // ── Boot ──
     function boot() {
         try { localStorage.setItem('__test__', '1'); localStorage.removeItem('__test__'); }
         catch (e) { document.body.innerHTML = '<div style="padding:40px;text-align:center"><h2>⚠️ localStorage が使用できません</h2><p>ブラウザの設定をご確認ください。</p></div>'; return; }
         initData(); navigate('mypage'); renderMypage(); bindEvents(); initNotifications();
+        applyScrollAnimation();
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();

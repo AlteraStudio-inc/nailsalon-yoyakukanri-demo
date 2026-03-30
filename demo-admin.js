@@ -32,14 +32,14 @@
             });
             
             // Staffs
-            const s1 = { id: 's101', name: 'MINAMI', image: 'https://i.pravatar.cc/150?u=12', fee: 1100, description: 'トップネイリスト。丁寧な施術に定評あり' };
-            const s2 = { id: 's102', name: 'YUKI', image: 'https://i.pravatar.cc/150?u=23', fee: 550, description: 'トレンドを取り入れたデザインが得意です' };
+            const s1 = { id: 's101', name: 'MINAMI', image: 'https://i.pravatar.cc/150?u=12', fee: 1100, description: 'トップスタイリスト。丁寧な施術に定評あり' };
+            const s2 = { id: 's102', name: 'YUKI', image: 'https://i.pravatar.cc/150?u=23', fee: 550, description: 'トレンドを取り入れたスタイルが得意です' };
             lsSet(LS.staffs, [s1, s2]);
             
             // Menus
-            const m1 = { id: 'm101', name: '【定番】ワンカラー／グラデーション', price: 5500, duration: 60, popular: true, description: 'オフィスにもおすすめのシンプルデザイン' };
-            const m2 = { id: 'm102', name: '【人気】定額アートコース', price: 7700, duration: 90, popular: true, description: '季節にあわせたトレンドデザイン50種から選べます' };
-            const m3 = { id: 'm103', name: '持ち込みデザイン（やり放題）', price: 9900, duration: 120, popular: false, description: 'SNSなどで見つけたお好きなデザインを再現します' };
+            const m1 = { id: 'm101', name: '【定番】カット+カラー', price: 8800, duration: 90, popular: true, description: '似合わせカットとトレンドカラーのセット' };
+            const m2 = { id: 'm102', name: '【人気】デザインカラーコース', price: 12100, duration: 120, popular: true, description: 'ハイライト・バレイヤージュなど立体感カラー' };
+            const m3 = { id: 'm103', name: 'パーマ+カット（デザインパーマ）', price: 13200, duration: 150, popular: false, description: 'ゆるふわからしっかりカールまでご要望に合わせて' };
             lsSet(LS.menus, [m1, m2, m3]);
             
             // Reservations
@@ -47,7 +47,7 @@
                 {
                     reservationId: 'res_' + uid(),
                     date: todayStr, startTime: '10:00', endTime: '11:00', durationMinutes: 60,
-                    menuId: 'm101', menuName: '【定番】ワンカラー／グラデーション', price: 5500,
+                    menuId: 'm101', menuName: '【定番】カット+カラー', price: 8800,
                     staffId: 's101', staffFee: 1100,
                     customerName: '田中 美咲', customerPhone: '09011112222', customerEmail: 'tanaka@example.com',
                     note: '', status: 'booked', createdAt: new Date(Date.now() - 86400000).toISOString()
@@ -55,15 +55,15 @@
                 {
                     reservationId: 'res_' + uid(),
                     date: todayStr, startTime: '13:00', endTime: '14:30', durationMinutes: 90,
-                    menuId: 'm102', menuName: '【人気】定額アートコース', price: 7700,
+                    menuId: 'm102', menuName: '【人気】デザインカラーコース', price: 12100,
                     staffId: 's102', staffFee: 550,
                     customerName: '佐藤 愛', customerPhone: '08033334444', customerEmail: 'sato@example.com',
-                    note: '前回のデザインがとても気に入ったとのこと', status: 'booked', createdAt: new Date(Date.now() - 172800000).toISOString()
+                    note: '前回のカラーがとても気に入ったとのこと', status: 'booked', createdAt: new Date(Date.now() - 172800000).toISOString()
                 },
                 {
                     reservationId: 'res_' + uid(),
                     date: todayStr, startTime: '15:30', endTime: '17:30', durationMinutes: 120,
-                    menuId: 'm103', menuName: '持ち込みデザイン（やり放題）', price: 9900,
+                    menuId: 'm103', menuName: 'パーマ+カット（デザインパーマ）', price: 13200,
                     staffId: '', staffFee: 0,
                     customerName: '鈴木 結衣', customerPhone: '07055556666', customerEmail: '',
                     note: '', status: 'booked', createdAt: new Date(Date.now() - 3600000).toISOString()
@@ -73,8 +73,8 @@
             
             // Customer Notes
             lsSet(LS.customerNotes, {
-                '09011112222': 'パステル系が好み。ジェルの持ちが良い爪質。前回の会話：推しのアイドルのライブに行く話で盛り上がった。',
-                '08033334444': '少し爪が薄めなので、ベースは厚めに塗布すること。'
+                '09011112222': 'アッシュ系が好み。髪質は細くて柔らかめ。前回の会話：推しのアイドルのライブに行く話で盛り上がった。',
+                '08033334444': '頭皮が少し敏感なので、カラー剤は低刺激タイプを使用すること。'
             });
         }
     }

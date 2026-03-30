@@ -8,14 +8,49 @@
     const LS = {
         shopInfo: 'br_shopInfo', menus: 'br_menus', settings: 'br_settings',
         reservations: 'br_reservations', notificationQueue: 'br_notificationQueue',
-        staffs: 'br_staffs', customerNotes: 'br_customerNotes'
+        staffs: 'br_staffs', customerNotes: 'br_customerNotes',
+        gallery: 'br_gallery', themeColors: 'br_themeColors'
     };
 
     const DAY_NAMES = ['日', '月', '火', '水', '木', '金', '土'];
 
+    // Utility: Async file to base64 (compressed to avoid localStorage limits)
+    function readImageBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width, h = img.height;
+                    const max = 600; // Resize to max 600px
+                    if (w > max || h > max) {
+                        if (w > h) { h = Math.round(h * max / w); w = max; }
+                        else { w = Math.round(w * max / h); h = max; }
+                    }
+                    canvas.width = w; canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    resolve(canvas.toDataURL('image/jpeg', 0.8)); // Convert to compressed JPEG
+                };
+                img.onerror = reject;
+                img.src = e.target.result;
+            };
+            reader.onerror = e => reject(e);
+            reader.readAsDataURL(file);
+        });
+    }
+
     // Helpers
     function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
-    function lsSet(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+    function lsSet(k, v) {
+        try {
+            localStorage.setItem(k, JSON.stringify(v));
+        } catch (e) {
+            alert('保存に失敗しました。画像サイズが大きすぎるか、データ上限（約5MB）に達しました。');
+            throw e;
+        }
+    }
     function $(id) { return document.getElementById(id); }
     function qsa(s) { return document.querySelectorAll(s); }
     function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -63,6 +98,7 @@
             case 'staffs': renderStaffs(); break;
             case 'sales': renderSales(); break;
             case 'customers': renderCustomers(); break;
+            case 'gallery': renderGallery(); break;
             case 'settings': renderSettings(); break;
         }
     }
@@ -307,20 +343,28 @@
             $('menu-price').value = m.price;
             $('menu-duration').value = m.duration;
             $('menu-popular').checked = m.popular;
+            $('menu-image').dataset.existing = m.image || ''; // store existing image silently
         } else {
             $('menu-modal-title').textContent = 'メニュー追加';
             $('menu-form').reset();
+            $('menu-image').dataset.existing = '';
         }
 
         modal.classList.remove('hidden');
     }
 
-    function saveMenu() {
+    async function saveMenu() {
         const name = $('menu-name').value.trim();
         const desc = $('menu-desc').value.trim();
         const price = parseInt($('menu-price').value) || 0;
         const duration = parseInt($('menu-duration').value) || 60;
         const popular = $('menu-popular').checked;
+        const imgInput = $('menu-image');
+        
+        let image = imgInput.dataset.existing || '';
+        if (imgInput.files && imgInput.files[0]) {
+            try { image = await readImageBase64(imgInput.files[0]); } catch(e) {}
+        }
 
         if (!name) { alert('メニュー名を入力してください'); return; }
         if (price <= 0) { alert('料金を正しく入力してください'); return; }
@@ -331,10 +375,10 @@
             const m = menus.find(x => x.id === editingMenuId);
             if (m) {
                 m.name = name; m.description = desc; m.price = price;
-                m.duration = duration; m.popular = popular;
+                m.duration = duration; m.popular = popular; m.image = image;
             }
         } else {
-            menus.push({ id: 'm' + uid(), name, description: desc, price, duration, popular });
+            menus.push({ id: 'm' + uid(), name, description: desc, price, duration, popular, image });
         }
 
         lsSet(LS.menus, menus);
@@ -388,22 +432,28 @@
             if (!s) return;
             $('staff-modal-title').textContent = 'スタッフ編集';
             $('staff-name').value = s.name;
-            $('staff-image').value = s.image;
             $('staff-fee').value = s.fee;
             $('staff-desc').value = s.description;
+            $('staff-image').dataset.existing = s.image || '';
         } else {
             $('staff-modal-title').textContent = 'スタッフ追加';
             $('staff-form').reset();
+            $('staff-image').dataset.existing = '';
         }
 
         modal.classList.remove('hidden');
     }
 
-    function saveStaff() {
+    async function saveStaff() {
         const name = $('staff-name').value.trim();
-        const image = $('staff-image').value.trim();
         const fee = parseInt($('staff-fee').value) || 0;
         const desc = $('staff-desc').value.trim();
+        
+        const imgInput = $('staff-image');
+        let image = imgInput.dataset.existing || '';
+        if (imgInput.files && imgInput.files[0]) {
+            try { image = await readImageBase64(imgInput.files[0]); } catch(e) {}
+        }
 
         if (!name) { alert('スタッフ名を入力してください'); return; }
 
@@ -598,6 +648,7 @@
     function renderSettings() {
         const shop = lsGet(LS.shopInfo) || {};
         const settings = lsGet(LS.settings) || {};
+        const theme = lsGet(LS.themeColors) || {};
 
         $('shop-name').value = shop.name || '';
         $('shop-phone').value = shop.phone || '';
@@ -608,6 +659,9 @@
         $('s-close').value = settings.closeTime || '20:00';
         $('s-slot').value = settings.slotMinutes || 30;
         $('s-max-days').value = settings.maxDays || 60;
+        
+        $('theme-primary').value = theme.primary || '#C47D8C';
+        $('theme-accent').value = theme.accent || '#7B9E7E';
 
         qsa('input[name="s-holiday"]').forEach(cb => {
             cb.checked = (settings.holidays || []).includes(parseInt(cb.value));
@@ -621,6 +675,13 @@
         shop.phone = $('shop-phone').value.trim();
         shop.address = $('shop-address').value.trim();
         shop.rules = $('shop-rules').value.trim();
+
+        // Theme colors
+        const themeColors = {
+            primary: $('theme-primary').value,
+            accent: $('theme-accent').value
+        };
+        lsSet(LS.themeColors, themeColors);
 
         // Settings
         const holidays = [];
@@ -768,6 +829,105 @@
         }
     }
 
+    // ── Gallery ──
+    let editingGalleryId = null;
+    function renderGallery() {
+        const galleries = lsGet(LS.gallery) || [];
+        const grid = $('gallery-grid-admin');
+        const menus = lsGet(LS.menus) || [];
+
+        if (galleries.length === 0) {
+            grid.innerHTML = '<p class="empty-state">ギャラリー画像がありません</p>';
+            return;
+        }
+
+        grid.innerHTML = galleries.map(g => {
+            const menu = menus.find(m => m.id === g.menuId);
+            const menuName = menu ? menu.name : '指定なし';
+            return `
+            <div class="menu-card" data-gallery-id="${g.id}">
+                <div style="height:150px; overflow:hidden; border-radius: var(--radius-md) var(--radius-md) 0 0; margin: -16px -16px 12px -16px;">
+                    <img src="${esc(g.img)}" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div class="menu-card-header">
+                    <span class="menu-card-name">${esc(g.title)}</span>
+                </div>
+                <p class="menu-card-desc" style="margin-bottom:8px;">${esc(g.desc || '')}</p>
+                <div class="menu-card-meta">
+                    <span class="menu-card-duration" style="background:var(--bg-main); padding:2px 6px; border-radius:4px;">${esc(menuName)}</span>
+                    <div class="menu-card-actions">
+                        <button class="btn-sm btn-sm-info" data-action="edit-gallery" data-id="${g.id}">編集</button>
+                        <button class="btn-sm btn-sm-danger" data-action="delete-gallery" data-id="${g.id}">削除</button>
+                    </div>
+                </div>
+            </div>
+        `}).join('');
+    }
+
+    function openGalleryModal(galleryId) {
+        editingGalleryId = galleryId || null;
+        const modal = $('gallery-modal');
+        const menus = lsGet(LS.menus) || [];
+        
+        let menuSelect = $('gallery-menu');
+        menuSelect.innerHTML = '<option value="">指定なし</option>' + menus.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join('');
+
+        if (galleryId) {
+            const galleries = lsGet(LS.gallery) || [];
+            const g = galleries.find(x => x.id === galleryId);
+            if (!g) return;
+            $('gallery-modal-title').textContent = 'ギャラリー編集';
+            $('gallery-title').value = g.title;
+            $('gallery-desc').value = g.desc;
+            $('gallery-menu').value = g.menuId || '';
+            $('gallery-image').dataset.existing = g.img || '';
+        } else {
+            $('gallery-modal-title').textContent = 'ギャラリー追加';
+            $('gallery-form').reset();
+            $('gallery-image').dataset.existing = '';
+        }
+
+        modal.classList.remove('hidden');
+    }
+
+    async function saveGallery() {
+        const title = $('gallery-title').value.trim();
+        const desc = $('gallery-desc').value.trim();
+        const menuId = $('gallery-menu').value;
+        
+        const imgInput = $('gallery-image');
+        let image = imgInput.dataset.existing || '';
+        if (imgInput.files && imgInput.files[0]) {
+            try { image = await readImageBase64(imgInput.files[0]); } catch(e) {}
+        }
+
+        if (!title) { alert('タイトルを入力してください'); return; }
+        if (!image) { alert('画像をアップロードしてください'); return; }
+
+        const galleries = lsGet(LS.gallery) || [];
+
+        if (editingGalleryId) {
+            const g = galleries.find(x => x.id === editingGalleryId);
+            if (g) {
+                g.title = title; g.desc = desc; g.menuId = menuId; g.img = image;
+            }
+        } else {
+            galleries.push({ id: 'g' + uid(), title, desc, menuId, img: image });
+        }
+
+        lsSet(LS.gallery, galleries);
+        $('gallery-modal').classList.add('hidden');
+        renderGallery();
+    }
+
+    function deleteGallery(galleryId) {
+        if (!confirm('この画像を削除しますか？')) return;
+        let galleries = lsGet(LS.gallery) || [];
+        galleries = galleries.filter(g => g.id !== galleryId);
+        lsSet(LS.gallery, galleries);
+        renderGallery();
+    }
+
     // ── Events ──
     function bindEvents() {
         // Sidebar nav
@@ -855,6 +1015,22 @@
             const id = btn.dataset.id;
             if (action === 'edit-staff') openStaffModal(id);
             else if (action === 'delete-staff') deleteStaff(id);
+        });
+
+        // Gallery management
+        $('btn-add-gallery').addEventListener('click', () => openGalleryModal(null));
+        $('btn-close-gallery-modal').addEventListener('click', () => $('gallery-modal').classList.add('hidden'));
+        $('btn-cancel-gallery').addEventListener('click', () => $('gallery-modal').classList.add('hidden'));
+        $('gallery-modal').addEventListener('click', e => { if (e.target === $('gallery-modal')) $('gallery-modal').classList.add('hidden'); });
+        $('gallery-form').addEventListener('submit', e => { e.preventDefault(); saveGallery(); });
+
+        $('gallery-grid-admin').addEventListener('click', e => {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+            if (action === 'edit-gallery') openGalleryModal(id);
+            else if (action === 'delete-gallery') deleteGallery(id);
         });
 
         // Customer search & record
