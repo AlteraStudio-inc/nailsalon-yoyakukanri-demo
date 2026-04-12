@@ -111,11 +111,11 @@ body {
    ================================ */
 .section-title {
     font-family: var(--font-serif);
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
     color: var(--text-heading);
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     line-height: 1.4;
 }
 
@@ -125,7 +125,7 @@ body {
     width: 40px;
     height: 2px;
     background: var(--accent);
-    margin: 8px auto 0;
+    margin: 6px auto 0;
 }
 
 /* ================================
@@ -166,13 +166,16 @@ body {
 
 .target-label {
     display: inline-block;
-    color: var(--accent);
-    font-size: 12px;
+    color: #fff;
+    font-size: 15px;
     font-weight: 700;
-    margin-bottom: 8px;
-    border: 1px solid var(--accent);
-    padding: 4px 12px;
-    border-radius: 20px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--accent) 0%, #BF9B30 100%);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 24px;
+    letter-spacing: 0.1em;
+    box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3);
 }
 
 .hero-title {
@@ -303,10 +306,30 @@ body {
    Page 2 (裏面)
    ================================ */
 
+/* 裏面全体の余白を圧縮してA4に収める */
+.page-back .page-inner {
+    padding: 8mm 14mm;
+    justify-content: space-between;
+    gap: 0;
+}
+
+.page-back .features {
+    gap: 14px;
+    margin-bottom: 0;
+}
+
+.page-back .feature-box {
+    padding: 12px 16px;
+}
+
+.page-back .f-num {
+    font-size: 36px;
+}
+
 .comparison-section {
-    margin: 20px 0;
+    margin: 0;
     background: #fff;
-    padding: 20px;
+    padding: 18px 20px;
     border-radius: var(--radius);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
@@ -319,7 +342,7 @@ body {
 
 .comp-table th,
 .comp-table td {
-    padding: 10px 8px;
+    padding: 9px 8px;
     border-bottom: 1px solid var(--border);
     text-align: center;
 }
@@ -349,12 +372,71 @@ body {
     background: rgba(232, 139, 158, 0.05);
 }
 
+/* --- 料金セクション --- */
+.pricing-section {
+    text-align: center;
+    margin: 0;
+}
+
+.pricing-inner {
+    background: #fff;
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 16px 24px 14px;
+    position: relative;
+}
+
+.pricing-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    display: inline-block;
+    padding: 3px 16px;
+    border-radius: 12px;
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+}
+
+.pricing-amount {
+    font-family: var(--font-serif);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--text-heading);
+    line-height: 1.2;
+    margin-top: 4px;
+}
+
+.pricing-yen {
+    font-size: 20px;
+    vertical-align: 2px;
+    margin-right: 2px;
+}
+
+.pricing-tax {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-left: 1px;
+}
+
+.pricing-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
 .social-proof-section {
     text-align: center;
     font-size: 12px;
     color: var(--accent);
     font-weight: 700;
-    margin-bottom: 16px;
+    margin: 0;
+    padding: 8px 0;
 }
 
 /* サポート体制 (追加コンテンツ) */
@@ -362,17 +444,17 @@ body {
     background: #fff;
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 20px;
+    padding: 16px 18px;
+    margin: 0;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
 
 .support-title {
     font-family: var(--font-serif);
-    font-size: 15px;
+    font-size: 14px;
     color: var(--accent);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     font-weight: 700;
 }
 
@@ -388,11 +470,11 @@ body {
 }
 
 .cta-section {
-    margin-top: auto;
+    margin-top: 0;
     background: linear-gradient(135deg, #E8B4B8 0%, #D89A9E 100%);
     color: #fff;
     border-radius: var(--radius);
-    padding: 24px;
+    padding: 20px 24px;
     box-shadow: 0 10px 20px rgba(232, 180, 184, 0.3);
 }
 
@@ -408,15 +490,15 @@ body {
 
 .cta-title {
     font-family: var(--font-serif);
-    font-size: 22px;
-    margin-bottom: 8px;
+    font-size: 20px;
+    margin-bottom: 6px;
     font-weight: 700;
 }
 
 .cta-desc {
-    font-size: 12px;
-    margin-bottom: 12px;
-    line-height: 1.6;
+    font-size: 11px;
+    margin-bottom: 8px;
+    line-height: 1.5;
     opacity: 0.9;
 }
 

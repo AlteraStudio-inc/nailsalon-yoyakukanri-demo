@@ -1,5 +1,5 @@
 // ================================
-// Beauty Reserve - Admin Dashboard
+// ビューティーNext - Admin Dashboard
 // ================================
 (function () {
     'use strict';

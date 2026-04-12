@@ -1,5 +1,5 @@
 // ================================
-// Beauty Reserve - Admin Dashboard
+// ビューティーNext - Admin Dashboard
 // ================================
 (function () {
     'use strict';
@@ -23,9 +23,9 @@
                 holidays: [0], slotMinutes: 30, maxDays: 60
             });
             lsSet(LS.shopInfo, {
-                name: 'Beauty Reserve デモ店',
-                phone: '03-1234-5678',
-                address: '東京都渋谷区サンプル1-2-3',
+                name: 'Next Hair Saion（デモ店）',
+                phone: '092-600-3558',
+                address: '福岡県福岡市中央区天神4丁目9-10 第二正友ビル4階',
                 rules: '10分以上遅刻の場合はキャンセルとなります。',
                 hours: '10:00〜20:00',
                 holidays: '毎週日曜日'

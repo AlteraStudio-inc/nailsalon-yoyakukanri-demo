@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="美容室管理画面 - 予約・メニュー・顧客管理">
-    <title>管理画面 - Beauty Reserve</title>
+    <title>管理画面 - ビューティーNext</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
@@ -90,17 +90,12 @@
             <circle cx="8.5" cy="7" r="4"></circle>
             <polyline points="17 11 19 13 23 9"></polyline>
         </symbol>
-        <symbol id="icon-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21 15 16 10 5 21"></polyline>
-        </symbol>
     </svg>
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h1 class="sidebar-logo">Beauty Reserve</h1>
+            <h1 class="sidebar-logo">ビューティーNext</h1>
             <span class="sidebar-subtitle">管理画面</span>
         </div>
         <nav class="sidebar-nav">
@@ -140,12 +135,6 @@
                 </svg>
                 <span class="nav-label">顧客一覧</span>
             </button>
-            <button class="nav-item" data-page="gallery">
-                <svg class="nav-icon">
-                    <use href="#icon-image" />
-                </svg>
-                <span class="nav-label">ギャラリー管理</span>
-            </button>
             <button class="nav-item" data-page="settings">
                 <svg class="nav-icon">
                     <use href="#icon-settings" />
@@ -170,7 +159,7 @@
                 <use href="#icon-menu" />
             </svg>
         </button>
-        <h1 class="mobile-title">Beauty Reserve 管理</h1>
+        <h1 class="mobile-title">ビューティーNext 管理</h1>
     </header>
 
     <!-- Main Content -->
@@ -313,11 +302,6 @@
                             <label for="menu-desc">説明</label>
                             <textarea id="menu-desc" rows="3"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="menu-image">画像アップロード（任意）</label>
-                            <input type="file" id="menu-image" accept="image/*">
-                            <p style="font-size:11px;color:#888;">※何も選択しない場合は元の画像が維持されます</p>
-                        </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="menu-price">料金（円）</label>
@@ -368,9 +352,8 @@
                             <input type="text" id="staff-name" required>
                         </div>
                         <div class="form-group">
-                            <label for="staff-image">写真アップロード</label>
-                            <input type="file" id="staff-image" accept="image/*">
-                            <p style="font-size:11px;color:#888;">※何も選択しない場合は元の画像が維持されます</p>
+                            <label for="staff-image">写真URL</label>
+                            <input type="url" id="staff-image" placeholder="https://..." required>
                         </div>
                         <div class="form-group">
                             <label for="staff-fee">指名料金（円）</label>
@@ -547,53 +530,6 @@
             </div>
         </section>
 
-        <!-- ============ GALLERY ============ -->
-        <section class="page" id="page-gallery">
-            <div class="page-header">
-                <h2>ギャラリー管理</h2>
-                <button class="btn-action" id="btn-add-gallery">+ 画像追加</button>
-            </div>
-
-            <div class="menu-grid" id="gallery-grid-admin"></div>
-
-            <!-- Gallery Edit Modal -->
-            <div class="modal-overlay hidden" id="gallery-modal">
-                <div class="modal-box">
-                    <div class="modal-head">
-                        <h3 id="gallery-modal-title">画像追加</h3>
-                        <button class="btn-close" id="btn-close-gallery-modal">
-                            <svg width="20" height="20">
-                                <use href="#icon-close" />
-                            </svg>
-                        </button>
-                    </div>
-                    <form id="gallery-form">
-                        <div class="form-group">
-                            <label for="gallery-image">画像アップロード</label>
-                            <input type="file" id="gallery-image" accept="image/*">
-                            <p style="font-size:11px;color:#888;">※何も選択しない場合は元の画像が維持されます</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="gallery-title">タイトル</label>
-                            <input type="text" id="gallery-title" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="gallery-desc">説明</label>
-                            <textarea id="gallery-desc" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="gallery-menu">関連メニュー</label>
-                            <select id="gallery-menu"></select>
-                        </div>
-                        <div class="modal-actions">
-                            <button type="button" class="btn-secondary" id="btn-cancel-gallery">キャンセル</button>
-                            <button type="submit" class="btn-primary">保存</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
         <!-- ============ SETTINGS ============ -->
         <section class="page" id="page-settings">
             <div class="page-header">
@@ -664,21 +600,6 @@
                         <input type="number" id="s-max-days" min="7" max="180">
                     </div>
                 </div>
-            </div>
-
-            <div class="settings-card">
-                <h3>サイトデザイン設定</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="theme-primary">メインカラー (RGB)</label>
-                        <input type="color" id="theme-primary" value="#C47D8C" style="width:100%; height:45px; padding:2px; cursor:pointer; border-radius:4px; border:1px solid var(--border);">
-                    </div>
-                    <div class="form-group">
-                        <label for="theme-accent">アクセントカラー (RGB)</label>
-                        <input type="color" id="theme-accent" value="#7B9E7E" style="width:100%; height:45px; padding:2px; cursor:pointer; border-radius:4px; border:1px solid var(--border);">
-                    </div>
-                </div>
-                <p style="font-size:12px;color:var(--text-light);margin-top:8px;">※設定すると自動でグラデーションやボタン色が計算され、お客様用サイトに反映されます。</p>
             </div>
 
             <button type="button" class="btn-primary btn-save-settings" id="btn-save-settings">設定を保存</button>

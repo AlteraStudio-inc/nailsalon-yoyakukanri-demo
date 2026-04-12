@@ -172,7 +172,7 @@ const mobileAdminSection = `
                     <div class="showcase-visual">
                         <div class="showcase-mobile-mockup">
                             <div class="mock-admin-header">
-                                <span>Beauty Reserve</span>
+                                <span>ビューティーNext</span>
                                 <span>≡</span>
                             </div>
                             <div class="mock-admin-body">
@@ -215,9 +215,9 @@ const compTable = `
     <!-- ==================== -->
     <section class="comparison" id="comparison">
         <div class="container">
-            <h2 class="section-title">予約管理、どうしていますか？</h2>
+            <h2 class="section-title">予約管理どうしていますか？</h2>
             <p style="text-align:center; margin-bottom:40px; color:var(--text-body);">
-                Beauty Reserveは「紙の手間」と「ポータルサイトの高コスト」の課題を同時に解決します。
+                ビューティーNextは「紙の手間」と「ポータルサイトの高コスト」の課題を同時に解決します。
             </p>
             <div class="comp-table-wrap">
                 <table class="comparison-table">
@@ -229,7 +229,7 @@ const compTable = `
                             <th style="width: 20%;">大手ポータルサイト</th>
                             <th style="width: 20%;" class="col-our">
                                 <div class="comp-badge">おすすめ!</div>
-                                Beauty Reserve
+                                ビューティーNext
                             </th>
                         </tr>
                     </thead>
@@ -269,7 +269,7 @@ const compTable = `
     </section>
 `;
 
-if (!html.includes('予約管理、どうしていますか？')) {
+if (!html.includes('予約管理どうしていますか？')) {
     html = html.replace('<!-- ==================== -->\r\n    <!-- ⑥ 導入効果・お客様の声 -->', compTable + '\r\n\r\n    <!-- ==================== -->\r\n    <!-- ⑥ 導入効果・お客様の声 -->');
     html = html.replace('<!-- ==================== -->\n    <!-- ⑥ 導入効果・お客様の声 -->', compTable + '\n\n    <!-- ==================== -->\n    <!-- ⑥ 導入効果・お客様の声 -->');
 }

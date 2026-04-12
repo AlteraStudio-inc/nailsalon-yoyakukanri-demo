@@ -1,5 +1,5 @@
 // ============================
-// Beauty Reserve - Main App
+// ビューティーNext - Main App
 // ============================
 (function () {
     'use strict';
@@ -8,12 +8,12 @@
         reservations: 'br_reservations', notificationQueue: 'br_notificationQueue',
         lastCustomer: 'br_lastCustomer', notifDismissed: 'br_notifDismissed',
         inAppNotifications: 'br_inAppNotifications', loggedInUser: 'br_loggedInUser',
-        staffs: 'br_staffs', gallery: 'br_gallery', themeColors: 'br_themeColors'
+        staffs: 'br_staffs', members: 'br_members'
     };
     const DAY_NAMES = ['日', '月', '火', '水', '木', '金', '土'];
     const DEFAULT_SHOP = {
-        name: 'Hair Salon テスト', address: '東京都新宿区西新宿3-4-5 テストビル1F',
-        phone: '000-1234-5678', hours: '10:00〜20:00（最終受付 19:00）',
+        name: 'Next Hair Saion', address: '福岡県福岡市中央区天神4丁目9-10 第二正友ビル4階',
+        phone: '092-600-3558', hours: '10:00〜20:00（最終受付 19:00）',
         holidays: '毎週火曜日', rules: 'キャンセルの際は事前にご連絡ください'
     };
     const DEFAULT_MENUS = [
@@ -33,10 +33,11 @@
     let state = {
         currentScreen: 'top', selectedMenu: null, selectedStaff: null, selectedDate: null, selectedTime: null,
         customerInfo: {}, note: '', weekStartDate: null,
-        adminFilter: 'all', adminSearch: '', nextBookingData: null, lastReservation: null
+        adminFilter: 'all', adminSearch: '', nextBookingData: null, lastReservation: null,
+        returnAfterLogin: null
     };
 
-    const DEFAULT_GALLERY = [
+    const gallery = [
         { id: 'g1', title: 'ナチュラルボブ', img: 'https://placehold.co/300x300/F6F1EB/C47D8C?text=Bob', menuId: 'm3', desc: '柔らかな質感の大人ナチュラルボブ。オフィスにも最適。' },
         { id: 'g2', title: '透明感カラー', img: 'https://placehold.co/300x300/ECD4D9/A56070?text=Color', menuId: 'm1', desc: 'ブリーチなしで叶える透け感のあるアッシュベージュ。' },
         { id: 'g3', title: 'ハイライトバレイヤージュ', img: 'https://placehold.co/300x300/C4DAC5/5A8060?text=Balayage', menuId: 'm2', desc: '立体感のある外国人風ハイライトカラー。' },
@@ -44,59 +45,6 @@
         { id: 'g5', title: '季節のトレンド', img: 'https://placehold.co/300x300/C4DAC5/7B9E7E?text=Trend', menuId: 'm1', desc: '今季おすすめのカラー＆スタイル。' },
         { id: 'g6', title: 'メンズショート', img: 'https://placehold.co/300x300/CFBFB4/28201A?text=Mens', menuId: 'm4', desc: 'すっきり爽やかなメンズショートスタイル。' }
     ];
-
-    function getGallery() {
-        const g = lsGet(LS_KEYS.gallery);
-        return g && g.length > 0 ? g : DEFAULT_GALLERY;
-    }
-
-    function applyDynamicTheme() {
-        const theme = lsGet(LS_KEYS.themeColors);
-        if (!theme) return;
-        
-        function hexToRgb(h) {
-            let r = 0, g = 0, b = 0;
-            if (h.length === 4) { r = parseInt(h[1]+h[1], 16); g = parseInt(h[2]+h[2], 16); b = parseInt(h[3]+h[3], 16); }
-            else if (h.length === 7) { r = parseInt(h[1]+h[2], 16); g = parseInt(h[3]+h[4], 16); b = parseInt(h[5]+h[6], 16); }
-            return [r, g, b];
-        }
-        function rgbToHex(r,g,b) {
-            return "#" + ((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1).toUpperCase();
-        }
-        function mix(rgb1, rgb2, weight) {
-            const w1 = weight; const w2 = 1 - weight;
-            return [Math.round(rgb1[0]*w1 + rgb2[0]*w2), Math.round(rgb1[1]*w1 + rgb2[1]*w2), Math.round(rgb1[2]*w1 + rgb2[2]*w2)];
-        }
-        
-        try {
-            const pRgb = hexToRgb(theme.primary);
-            const pDark = rgbToHex(...mix(pRgb, [0,0,0], 0.8));
-            const pLight = rgbToHex(...mix(pRgb, [255,255,255], 0.2));
-            const pGrad = `linear-gradient(135deg, ${theme.primary} 0%, ${rgbToHex(...mix(pRgb, [255,255,255], 0.7))} 100%)`;
-
-            const aRgb = hexToRgb(theme.accent);
-            const aLight = rgbToHex(...mix(aRgb, [255,255,255], 0.3));
-
-            let style = document.getElementById('dynamic-theme');
-            if (!style) {
-                style = document.createElement('style');
-                style.id = 'dynamic-theme';
-                document.head.appendChild(style);
-            }
-            style.textContent = `
-                :root {
-                    --primary: ${theme.primary};
-                    --primary-dark: ${pDark};
-                    --primary-light: ${pLight};
-                    --primary-gradient: ${pGrad};
-                    --accent: ${theme.accent};
-                    --accent-light: ${aLight};
-                }
-            `;
-        } catch(e) {}
-    }
-
-    applyDynamicTheme();
 
     // ── Helpers ──
     function lsGet(k) {
@@ -189,7 +137,7 @@
     // ── Render: Top ──
     function renderTop() {
         const shop = lsGet(LS_KEYS.shopInfo); const menus = lsGet(LS_KEYS.menus);
-        $('header-shop-name').textContent = shop.name;
+        $('header-shop-name').textContent = 'ビューティーNext';
         $('shop-name').textContent = shop.name;
         $('shop-address').textContent = shop.address;
         $('shop-phone').textContent = shop.phone;
@@ -198,71 +146,22 @@
         $('shop-rules').textContent = shop.rules;
         const list = $('menu-list'); list.innerHTML = '';
         menus.forEach(m => {
-            const card = document.createElement('div'); card.className = 'menu-card fade-in-up';
-            const imgHtml = m.image ? `<img src="${esc(m.image)}" alt="${esc(m.name)}" style="width:100px; height:80px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--border); float:right; margin-left:12px; margin-bottom:12px;">` : '';
-            card.innerHTML = `${imgHtml}<div class="menu-card-top"><span class="menu-name">${esc(m.name)}</span>
-        ${m.popular ? '<span class="popular-badge">人気</span>' : ''}</div>
+            const card = document.createElement('div'); card.className = 'menu-card';
+            card.innerHTML = `<div class="menu-card-top"><span class="menu-name">${esc(m.name)}</span>
+        ${m.popular ? '<span class="popular-badge">🔥 人気</span>' : ''}</div>
         <p class="menu-desc">${esc(m.description)}</p>
-        <div class="menu-meta" style="clear:both;"><span class="menu-duration">所要時間: ${m.duration}分</span><span class="menu-price">${formatPrice(m.price)}</span></div>
-        <button class="btn-select-menu" style="clear:both;" data-menu-id="${m.id}">このメニューを選ぶ</button>`;
+        <div class="menu-meta"><span class="menu-duration">⏱ ${m.duration}分</span><span class="menu-price">${formatPrice(m.price)}</span></div>
+        <button class="btn-select-menu" data-menu-id="${m.id}">このメニューを選ぶ</button>`;
             list.appendChild(card);
         });
-
-        const historySec = $('recent-history-section');
-        const user = lsGet(LS_KEYS.loggedInUser);
-        if (historySec) {
-            if (user) {
-                const reservations = (lsGet(LS_KEYS.reservations) || [])
-                    .filter(r => r.customerName === user.name && r.customerPhone.replace(/[-\s]/g, '') === user.phone.replace(/[-\s]/g, ''))
-                    .filter(r => r.status === 'completed' || r.status === 'booked')
-                    .sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                const uniqueRes = [];
-                const seenPairs = new Set();
-                for (const r of reservations) {
-                    const key = r.menuId + '_' + (r.staffId || 'none');
-                    if (!seenPairs.has(key)) {
-                        seenPairs.add(key);
-                        uniqueRes.push(r);
-                        if (uniqueRes.length >= 5) break; 
-                    }
-                }
-                
-                if (uniqueRes.length > 0) {
-                    historySec.style.display = 'block';
-                    const carousel = $('history-carousel');
-                    const staffs = lsGet(LS_KEYS.staffs) || [];
-                    carousel.innerHTML = uniqueRes.map(r => {
-                        const staff = r.staffId ? staffs.find(s => s.id === r.staffId) : null;
-                        const staffName = staff ? staff.name : (r.staffId ? '退職済' : 'なし');
-                        return `
-                            <div class="history-carousel-card">
-                                <div class="history-carousel-header">
-                                    <span class="history-date">${formatDate(r.date)}</span>
-                                </div>
-                                <div class="history-content">
-                                    <span class="history-menu-name">${esc(r.menuName)}</span>
-                                    <span class="history-staff-name">指名: ${esc(staffName)}</span>
-                                </div>
-                                <button type="button" class="btn-rebook" data-menu-id="${r.menuId}" data-staff-id="${r.staffId || ''}">同じメニューで予約</button>
-                            </div>
-                        `;
-                    }).join('');
-                } else {
-                    historySec.style.display = 'none';
-                }
-            } else {
-                historySec.style.display = 'none';
-            }
-        }
     }
 
     function renderStaffsForCustomer() {
-        $('selected-menu-for-staff').textContent = `${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}`;
+        $('selected-menu-for-staff').textContent = `✂️ ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}`;
         const staffs = lsGet(LS_KEYS.staffs) || [];
         const grid = $('staff-selection-grid');
         grid.innerHTML = staffs.map(s => `
-            <div class="staff-selection-card fade-in-up">
+            <div class="staff-selection-card">
                 <img src="${esc(s.image || 'https://i.pravatar.cc/150')}" alt="${esc(s.name)}" class="staff-selection-avatar" loading="lazy">
                 <div class="staff-selection-info">
                     <div class="staff-selection-name">${esc(s.name)}</div>
@@ -272,32 +171,6 @@
                 <button type="button" class="btn-select-staff" data-id="${s.id}" data-fee="${s.fee}" data-name="${esc(s.name)}">指名する</button>
             </div>
         `).join('');
-    }
-
-    function renderGalleryGrid() {
-        const grid = $('gallery-grid');
-        if (!grid) return;
-        
-        // Ensure the grid has proper grid layout styling since we dynamically restored it
-        grid.style.display = 'grid';
-        grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(140px, 1fr))';
-        grid.style.gap = '16px';
-        grid.style.padding = '16px';
-        
-        const menus = lsGet(LS_KEYS.menus) || [];
-        grid.innerHTML = getGallery().map(g => {
-            const m = menus.find(x => x.id === g.menuId);
-            return `
-            <div class="gallery-card fade-in-up" data-id="${g.id}" style="cursor:pointer;">
-                <img src="${esc(g.img)}" alt="${esc(g.title)}" class="gallery-img" style="width:100%; height:200px; object-fit:cover; border-radius:var(--radius-sm) var(--radius-sm) 0 0;">
-                <div class="gallery-card-body" style="padding:12px; border:1px solid var(--border); border-top:none; border-radius:0 0 var(--radius-sm) var(--radius-sm);">
-                    <h3 class="gallery-card-title" style="font-size:14px; margin-bottom:4px;">${esc(g.title)}</h3>
-                    <p class="gallery-card-desc" style="font-size:12px; color:var(--text-light); margin-bottom:8px;">${esc(g.desc || '')}</p>
-                    ${m ? `<span class="gallery-card-menu" style="font-size:11px; padding:2px 8px; background:var(--bg-main); border-radius:4px;">${esc(m.name)}</span>` : ''}
-                </div>
-            </div>
-            `;
-        }).join('');
     }
 
     // ── Render: Week Grid (HPB style) ──
@@ -474,25 +347,15 @@
 
     function renderDone() {
         const r = state.lastReservation;
+        const iconCal = '<svg class="done-sum-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+        const iconClock = '<svg class="done-sum-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+        const iconUser = '<svg class="done-sum-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+        const iconPhone = '<svg class="done-sum-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
+        const iconNote = '<svg class="done-sum-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
         $('done-summary').innerHTML = `<strong>${esc(r.menuName)}</strong><br>
-      ${formatDate(r.date)}<br>${r.startTime}〜${r.endTime}<br>
-      氏名: ${esc(r.customerName)}<br>電話番号: ${esc(r.customerPhone)}
-      ${r.note ? '<br>備考: ' + esc(r.note) : ''}`;
-
-        // Confetti
-        const colors = ['#ff6b81', '#ffc107', '#2196f3', '#4caf50', '#e91e63'];
-        const container = qs('.celebration-confetti');
-        if (container) {
-            container.innerHTML = '';
-            for (let i = 0; i < 50; i++) {
-                const el = document.createElement('div'); el.className = 'confetti-piece';
-                el.style.left = Math.random() * 100 + '%';
-                el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                el.style.animationDelay = Math.random() * 2 + 's';
-                el.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                container.appendChild(el);
-            }
-        }
+      ${iconCal} ${formatDate(r.date)}<br>${iconClock} ${r.startTime}〜${r.endTime}<br>
+      ${iconUser} ${esc(r.customerName)}<br>${iconPhone} ${esc(r.customerPhone)}
+      ${r.note ? '<br>' + iconNote + ' ' + esc(r.note) : ''}`;
     }
 
     // ── Next Suggestion Calc ──
@@ -567,7 +430,11 @@
     function showMypageLogin() {
         $('mypage-login').style.display = ''; $('mypage-content').classList.add('hidden');
         $('login-name').value = ''; $('login-phone').value = ''; $('error-login').textContent = '';
+        $('error-register').textContent = '';
         $('btn-back-mypage').style.display = 'none';
+        // Reset to login tab
+        $('tab-login').classList.add('active'); $('tab-register').classList.remove('active');
+        $('auth-login-form').style.display = ''; $('auth-register-form').style.display = 'none';
     }
 
     function showMypageContent(user) {
@@ -586,8 +453,8 @@
             const card = document.createElement('div'); card.className = 'mypage-res-card';
             card.innerHTML = `<div class="mypage-res-top"><span class="mypage-res-menu">${esc(r.menuName)}</span>
         <span class="status-badge status-${r.status}">${statusLabel[r.status]}</span></div>
-        <div class="mypage-res-info">${formatDate(r.date)}　${r.startTime}〜${r.endTime}<br>
-        ${formatPrice(r.price)}　所要時間: ${r.durationMinutes}分${r.note ? '<br>備考: ' + esc(r.note) : ''}</div>
+        <div class="mypage-res-info">📅 ${formatDate(r.date)}　${r.startTime}〜${r.endTime}<br>
+        💰 ${formatPrice(r.price)}　⏱ ${r.durationMinutes}分${r.note ? '<br>📝 ' + esc(r.note) : ''}</div>
         <div style="text-align:right;margin-top:8px;font-size:12px;color:var(--primary-color)">詳細・変更 &gt;</div>`;
             card.onclick = () => showUserResDetail(r.reservationId);
             list.appendChild(card);
@@ -598,7 +465,7 @@
     function renderGallery() {
         const grid = $('gallery-grid'); grid.innerHTML = '';
         gallery.forEach(item => {
-            const el = document.createElement('div'); el.className = 'gallery-item fade-in-up';
+            const el = document.createElement('div'); el.className = 'gallery-item';
             el.innerHTML = `<img src="${item.img}" class="gallery-img"><div class="gallery-info">${item.title}</div>`;
             el.onclick = () => showGalleryDetail(item);
             grid.appendChild(el);
@@ -621,7 +488,7 @@
             $('modal-overlay').classList.add('hidden');
             state.selectedMenu = menu; state.selectedDate = null; state.selectedTime = null;
             const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
-            $('selected-menu-summary').textContent = `${menu.name}　${formatPrice(menu.price)}`;
+            $('selected-menu-summary').textContent = `✂️ ${menu.name}　${formatPrice(menu.price)}`;
             renderWeekGrid(); navigate('datetime');
         };
         actions.appendChild(btn);
@@ -781,8 +648,6 @@
     // ── Notifications ──
     let notifTimers = {};
     function initNotifications() {
-        if ('Notification' in window && Notification.permission === 'default' && !lsGet(LS_KEYS.notifDismissed))
-            $('notification-banner').classList.remove('hidden');
         updateBellVisibility(); processNotificationQueue(); setInterval(processNotificationQueue, 30000);
     }
     function scheduleNotification(resId, fireAt) {
@@ -814,7 +679,7 @@
         }
         if ('Notification' in window && Notification.permission === 'granted') {
             try {
-                const notif = new Notification('Beauty Reserve', { body: item.message, tag: resId });
+                const notif = new Notification('ビューティーNext', { body: item.message, tag: resId });
                 notif.onclick = () => { window.focus(); startRebooking(item); notif.close(); };
             } catch (e) { }
         }
@@ -856,7 +721,7 @@
         state.selectedMenu = menu; state.selectedDate = nd.suggestedDate; state.selectedTime = nd.suggestedTime;
         state.customerInfo = { name: nd.customerName || '', phone: nd.customerPhone || '', email: nd.customerEmail || '' };
         state.note = ''; state.nextBookingData = nd;
-        $('selected-menu-summary').textContent = `${menu.name}　${formatPrice(menu.price)}`;
+        $('selected-menu-summary').textContent = `✂️ ${menu.name}　${formatPrice(menu.price)}`;
         // Name & Phone inputs removed
         $('input-email').value = state.customerInfo.email || '';
         navigate('info'); showToast('前回の情報を復元しました。', 'success');
@@ -889,88 +754,57 @@
         $('btn-home').addEventListener('click', () => { navigate('top'); renderTop(); });
         $('btn-mypage').addEventListener('click', () => { navigate('mypage'); renderMypage(); });
         $('btn-back-mypage').addEventListener('click', () => { navigate('top'); renderTop(); });
-        // Login (Test Mode)
+        // Auth tab switching
+        qsa('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                qsa('.auth-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                $('auth-login-form').style.display = tab.dataset.tab === 'login' ? '' : 'none';
+                $('auth-register-form').style.display = tab.dataset.tab === 'register' ? '' : 'none';
+                $('error-login').textContent = ''; $('error-register').textContent = '';
+            });
+        });
+        // Login
         $('btn-login').addEventListener('click', () => {
-            let name = $('login-name').value.trim(), phone = $('login-phone').value.trim();
-            if (!name) name = 'ゲスト';
-            if (!phone) phone = '000-0000-0000';
-
-            if (!name || !phone) { $('error-login').textContent = 'テスト用：適当な名前と電話番号を入力してください'; return; }
+            const loginId = $('login-name').value.trim();
+            const phone = $('login-phone').value.trim();
+            if (!loginId || !phone) { $('error-login').textContent = 'ログインIDと電話番号を入力してください'; return; }
+            const members = lsGet(LS_KEYS.members) || [];
+            const member = members.find(m => m.loginId === loginId && m.phone.replace(/[-\s]/g, '') === phone.replace(/[-\s]/g, ''));
+            if (!member) { $('error-login').textContent = 'ログインIDまたは電話番号が正しくありません'; return; }
             $('error-login').textContent = '';
-            const user = { name, phone }; lsSet(LS_KEYS.loggedInUser, user);
-            let reservations = lsGet(LS_KEYS.reservations) || [];
-            const userRes = reservations.filter(r => r.customerName === name && r.customerPhone.replace(/[-\s]/g, '') === phone.replace(/[-\s]/g, ''));
-            if (userRes.length === 0) {
-                const past = new Date(); past.setMonth(past.getMonth() - 1);
-                const pastRes = {
-                    reservationId: uid(), menuId: 'm1', menuName: 'カット+カラー(仮)', durationMinutes: 120, price: 9800,
-                    staffId: 's1', staffFee: 500,
-                    date: dateStr(past), startTime: '10:00', endTime: '11:30',
-                    customerName: name, customerPhone: phone, customerEmail: 'test@example.com',
-                    note: 'テスト', status: 'completed',
-                    createdAt: new Date(past.getTime() - 86400000).toISOString(),
-                    nextSuggestAt: null, nextSuggestDateTime: '', nextSuggestMessage: ''
-                };
-                const future = new Date(); future.setDate(future.getDate() + 14);
-                const futureRes = {
-                    reservationId: uid(), menuId: 'm3', menuName: 'ワンカラー(仮)', durationMinutes: 60, price: 5500,
-                    staffId: null, staffFee: 0,
-                    date: dateStr(future), startTime: '14:00', endTime: '15:00',
-                    customerName: name, customerPhone: phone, customerEmail: 'test@example.com',
-                    note: 'テスト', status: 'booked',
-                    createdAt: new Date().toISOString(),
-                    nextSuggestAt: null, nextSuggestDateTime: '', nextSuggestMessage: ''
-                };
-                reservations.push(pastRes, futureRes);
-                lsSet(LS_KEYS.reservations, reservations);
-                showToast('テスト用データを生成しました', 'success');
-            } else {
-                showToast('ログインしました', 'success');
-            }
-            // ログイン後はトップページ（メニュー一覧）へ遷移
-            renderTop(); navigate('top');
+            const user = { name: member.name, phone: member.phone, email: member.email || '', loginId: member.loginId };
+            lsSet(LS_KEYS.loggedInUser, user);
+            showToast(`${member.name}様、ようこそ！`, 'success');
+            if (state.returnAfterLogin) { const dest = state.returnAfterLogin; state.returnAfterLogin = null; navigate(dest); }
+            else { renderTop(); navigate('top'); }
+        });
+        // Register
+        $('btn-register').addEventListener('click', () => {
+            const name = $('reg-name').value.trim();
+            const phone = $('reg-phone').value.trim();
+            const email = $('reg-email').value.trim();
+            const loginId = $('reg-login-id').value.trim();
+            if (!name) { $('error-register').textContent = 'お名前を入力してください'; return; }
+            if (!phone) { $('error-register').textContent = '電話番号を入力してください'; return; }
+            if (!loginId) { $('error-register').textContent = 'ログインIDを入力してください'; return; }
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { $('error-register').textContent = '正しいメールアドレスを入力してください'; return; }
+            const members = lsGet(LS_KEYS.members) || [];
+            if (members.find(m => m.loginId === loginId)) { $('error-register').textContent = 'このログインIDは既に使われています'; return; }
+            const newMember = { id: uid(), name, phone, email, loginId, createdAt: new Date().toISOString() };
+            members.push(newMember); lsSet(LS_KEYS.members, members);
+            const user = { name, phone, email, loginId };
+            lsSet(LS_KEYS.loggedInUser, user);
+            $('error-register').textContent = '';
+            showToast('会員登録が完了しました！', 'success');
+            if (state.returnAfterLogin) { const dest = state.returnAfterLogin; state.returnAfterLogin = null; navigate(dest); }
+            else { renderTop(); navigate('top'); }
         });
         $('btn-logout').addEventListener('click', () => {
             localStorage.removeItem(LS_KEYS.loggedInUser); showMypageLogin(); showToast('ログアウトしました', 'success');
         });
         // Admin (hidden, via hash)
         $('btn-back-admin').addEventListener('click', () => { navigate('top'); renderTop(); });
-        
-        // Gallery
-        const btnToGallery = $('btn-to-gallery');
-        if (btnToGallery) {
-            btnToGallery.addEventListener('click', () => {
-                navigate('gallery');
-                renderGalleryGrid();
-            });
-        }
-        const btnBackGallery = $('btn-back-gallery');
-        if (btnBackGallery) {
-            btnBackGallery.addEventListener('click', () => {
-                navigate('top'); renderTop();
-            });
-        }
-        
-        const galleryGrid = $('gallery-grid');
-        if (galleryGrid) {
-            galleryGrid.addEventListener('click', e => {
-                const card = e.target.closest('.gallery-card'); if (!card) return;
-                const g = getGallery().find(x => x.id === card.dataset.id);
-                if (!g) return;
-                // Pre-select menu if exists
-                if (g.menuId) {
-                    const menus = lsGet(LS_KEYS.menus);
-                    const menu = menus.find(m => m.id === g.menuId);
-                    if (menu) {
-                        state.selectedMenu = menu;
-                        state.selectedStaff = null;
-                        state.selectedDate = null; state.selectedTime = null;
-                        renderStaffsForCustomer(); navigate('staff');
-                    }
-                }
-            });
-        }
-
         // Menu selection
         $('menu-list').addEventListener('click', e => {
             const btn = e.target.closest('.btn-select-menu'); if (!btn) return;
@@ -980,46 +814,6 @@
             state.selectedDate = null; state.selectedTime = null;
             renderStaffsForCustomer(); navigate('staff');
         });
-
-        // History rebook
-        const historySecEvents = $('recent-history-section');
-        if (historySecEvents) {
-            historySecEvents.addEventListener('click', e => {
-                const btn = e.target.closest('.btn-rebook'); if (!btn) return;
-                const menus = lsGet(LS_KEYS.menus) || [];
-                const staffs = lsGet(LS_KEYS.staffs) || [];
-                
-                const menu = menus.find(m => m.id === btn.dataset.menuId);
-                if (!menu) { showToast('このメニューは現在ご利用できません', 'error'); return; }
-                
-                state.selectedMenu = menu;
-                state.selectedDate = null; state.selectedTime = null;
-                
-                const staffId = btn.dataset.staffId;
-                if (staffId && staffId !== 'null') {
-                    const staff = staffs.find(s => s.id === staffId);
-                    if (staff) {
-                        state.selectedStaff = { id: staff.id, name: staff.name, fee: staff.fee };
-                    } else {
-                        state.selectedStaff = { id: null, name: '指名なし', fee: 0 };
-                    }
-                } else {
-                    state.selectedStaff = { id: null, name: '指名なし', fee: 0 };
-                }
-                
-                const user = lsGet(LS_KEYS.loggedInUser);
-                if (user) {
-                    const lastCustomer = lsGet(LS_KEYS.lastCustomer) || {};
-                    state.customerInfo = { name: user.name, phone: user.phone, email: lastCustomer.email || '', gender: lastCustomer.gender || '', visitType: lastCustomer.visitType || '' };
-                }
-                
-                let staffFeePrice = state.selectedStaff.fee > 0 ? formatPrice(state.selectedStaff.fee) : '無料';
-                $('selected-menu-summary').innerHTML = `${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>指名: ${state.selectedStaff.name} (${staffFeePrice})`;
-                
-                const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
-                renderWeekGrid(); navigate('datetime');
-            });
-        }
         // Staff selection
         $('btn-back-staff').addEventListener('click', () => { navigate('top'); });
         $('staff-selection-grid').addEventListener('click', e => {
@@ -1028,13 +822,13 @@
             const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
             let staffFeePrice = formatPrice(state.selectedStaff.fee);
             if (state.selectedStaff.fee === 0) staffFeePrice = '無料';
-            $('selected-menu-summary').innerHTML = `${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>指名: ${state.selectedStaff.name} (${staffFeePrice})`;
+            $('selected-menu-summary').innerHTML = `✂️ ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>👤 指名: ${state.selectedStaff.name} (${staffFeePrice})`;
             renderWeekGrid(); navigate('datetime');
         });
         $('btn-staff-none').addEventListener('click', () => {
             state.selectedStaff = { id: null, name: '指名なし', fee: 0 };
             const today = new Date(); today.setHours(0, 0, 0, 0); state.weekStartDate = new Date(today);
-            $('selected-menu-summary').innerHTML = `${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>指名: なし`;
+            $('selected-menu-summary').innerHTML = `✂️ ${state.selectedMenu.name}　${formatPrice(state.selectedMenu.price)}<br>👤 指名: なし`;
             renderWeekGrid(); navigate('datetime');
         });
         // Week nav
@@ -1049,6 +843,14 @@
             const btn = e.target.closest('.wg-cell-btn'); if (!btn || btn.disabled) return;
             state.selectedDate = btn.dataset.date; state.selectedTime = btn.dataset.time;
             renderWeekGrid();
+            // ログイン済みか確認
+            const loggedIn = lsGet(LS_KEYS.loggedInUser);
+            if (!loggedIn) {
+                state.returnAfterLogin = 'info';
+                showToast('予約にはログインまたは会員登録が必要です', 'info');
+                navigate('mypage'); renderMypage();
+                return;
+            }
             const last = lsGet(LS_KEYS.lastCustomer);
             if (last && !state.nextBookingData) {
                 $('input-email').value = last.email || '';
@@ -1076,8 +878,9 @@
         });
         $('input-note').addEventListener('input', () => { $('note-char-count').textContent = $('input-note').value.length; });
         $('btn-note-next').addEventListener('click', () => { state.note = $('input-note').value.trim(); renderConfirm(); navigate('confirm'); });
+        // Confirm
         $('btn-confirm-submit').addEventListener('click', () => {
-            if (saveReservation()) { renderDone(); navigate('done'); showToast('ご予約ありがとうございます！', 'success'); }
+            if (saveReservation()) { renderDone(); navigate('done'); showToast('ご予約ありがとうございます！🎉', 'success'); }
         });
         // Done
         $('btn-back-top').addEventListener('click', () => {
@@ -1120,16 +923,9 @@
             showToast('設定を保存しました', 'success');
         });
 
-        // Gallery Events (Removed duplicate bindings due to RefError)
-        $('btn-allow-notification').addEventListener('click', () => {
-            if ('Notification' in window) Notification.requestPermission().then(p => {
-                $('notification-banner').classList.add('hidden');
-                if (p === 'granted') showToast('通知を許可しました', 'success');
-            });
-        });
-        $('btn-dismiss-notification').addEventListener('click', () => {
-            $('notification-banner').classList.add('hidden'); lsSet(LS_KEYS.notifDismissed, true);
-        });
+        // Gallery Events
+        $('btn-to-gallery').addEventListener('click', () => { renderGallery(); navigate('gallery'); });
+        $('btn-back-gallery').addEventListener('click', () => { navigate('top'); renderTop(); });
         $('notification-bell').addEventListener('click', () => $('notification-panel').classList.toggle('hidden'));
         $('btn-close-notifications').addEventListener('click', () => $('notification-panel').classList.add('hidden'));
         // Hash-based admin access
@@ -1138,38 +934,15 @@
 
     function checkHash() { if (location.hash === '#admin') { navigate('admin'); renderAdmin(); } }
 
-    function applyScrollAnimation() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    // Stop observing once visible if you only want it to fade in once
-                    // observer.unobserve(entry.target); 
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-        
-        const mo = new MutationObserver(mutations => {
-            mutations.forEach(m => {
-                m.addedNodes.forEach(n => {
-                    if (n.nodeType === 1) {
-                        if (n.classList.contains('fade-in-up')) observer.observe(n);
-                        n.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
-                    }
-                });
-            });
-        });
-        mo.observe(document.body, { childList: true, subtree: true });
-        
-        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
-    }
-
     // ── Boot ──
     function boot() {
         try { localStorage.setItem('__test__', '1'); localStorage.removeItem('__test__'); }
         catch (e) { document.body.innerHTML = '<div style="padding:40px;text-align:center"><h2>⚠️ localStorage が使用できません</h2><p>ブラウザの設定をご確認ください。</p></div>'; return; }
-        initData(); navigate('mypage'); renderMypage(); bindEvents(); initNotifications();
-        applyScrollAnimation();
+        initData();
+        const loggedIn = lsGet(LS_KEYS.loggedInUser);
+        if (loggedIn) { navigate('top'); renderTop(); }
+        else { navigate('mypage'); renderMypage(); }
+        bindEvents(); initNotifications();
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();

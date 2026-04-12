@@ -1,5 +1,5 @@
 /* ============================
-   Beauty Reserve - Botanical Spring
+   ビューティーNext - Botanical Spring
    ============================ */
 
 /* --- CSS Variables --- */
@@ -68,19 +68,6 @@ body {
 /* --- Utilities --- */
 .hidden {
     display: none !important;
-}
-
-/* --- Scroll Animation (Elegant style) --- */
-.fade-in-up {
-    opacity: 0;
-    transform: translateY(24px) scale(0.99);
-    transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-    will-change: opacity, transform;
-}
-
-.fade-in-up.is-visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
 }
 
 
@@ -406,6 +393,14 @@ body {
     flex-shrink: 0;
     font-size: 15px;
     line-height: 1.5;
+    display: flex;
+    align-items: center;
+}
+
+.shop-info-svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--primary);
 }
 
 /* --- Section Title --- */
@@ -621,84 +616,6 @@ body {
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-}
-
-/* --- History Carousel --- */
-.history-carousel {
-    display: flex;
-    overflow-x: auto;
-    gap: 16px;
-    padding-bottom: 20px;
-    margin-bottom: 8px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-}
-
-.history-carousel::-webkit-scrollbar {
-    display: none;
-}
-
-.history-carousel-card {
-    flex: 0 0 85%;
-    background: var(--bg-card);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border);
-    padding: 16px;
-    scroll-snap-align: center;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.history-carousel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px dashed var(--border);
-    padding-bottom: 8px;
-}
-
-.history-date {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-.history-content {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.history-menu-name {
-    font-weight: 600;
-    color: var(--text);
-    font-size: 15px;
-}
-
-.history-staff-name {
-    font-size: 13px;
-    color: var(--text-secondary);
-}
-
-.btn-rebook {
-    background: var(--bg-card);
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    border-radius: var(--radius-sm);
-    padding: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s ease;
-    margin-top: auto;
-}
-
-.btn-rebook:active {
-    background: var(--primary-light);
 }
 
 .btn-select-staff {
@@ -1278,6 +1195,16 @@ textarea.error {
     margin-bottom: 6px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.confirm-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    stroke: var(--primary);
 }
 
 .confirm-section p {
@@ -1337,46 +1264,42 @@ textarea.error {
 }
 
 .done-icon {
-    font-size: 60px;
-    animation: bloomIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     position: relative;
     z-index: 1;
-}
-
-@keyframes bloomIn {
-    0% {
-        transform: scale(0) rotate(-10deg);
-        opacity: 0;
-    }
-
-    60% {
-        transform: scale(1.15) rotate(4deg);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(1) rotate(0deg);
-        opacity: 1;
-    }
-}
-
-/* Legacy bounceIn alias */
-@keyframes bounceIn {
-    0% {
-        transform: scale(0);
-    }
-
-    50% {
-        transform: scale(1.15);
-    }
-
-    100% {
-        transform: scale(1);
-    }
+    animation: bloomIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .done-icon.pop-animation {
     animation: bloomIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.done-calendar-svg {
+    width: 80px;
+    height: 80px;
+}
+
+@keyframes bloomIn {
+    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+    60% { transform: scale(1.15) rotate(4deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Calendar check animation */
+.cal-check-bg {
+    animation: calCheckBgIn 0.4s ease-out 0.8s forwards;
+}
+
+@keyframes calCheckBgIn {
+    0% { opacity: 0; r: 0; }
+    100% { opacity: 1; r: 12; }
+}
+
+.cal-check {
+    animation: calCheckDraw 0.5s ease-out 1.0s forwards;
+}
+
+@keyframes calCheckDraw {
+    to { stroke-dashoffset: 0; }
 }
 
 .done-container h2 {
@@ -1413,63 +1336,14 @@ textarea.error {
     color: var(--text-secondary);
 }
 
-/* --- Petal Confetti Animation --- */
-.celebration-confetti {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-}
-
-/* Petal shape replaces square confetti */
-.confetti-piece {
-    position: absolute;
-    width: 10px;
+.done-sum-icon {
+    width: 14px;
     height: 14px;
-    top: -20px;
-    border-radius: 50% 10% 50% 10%;   /* Asymmetric petal shape */
-    animation: petalFall 3.8s ease-in infinite;
-    opacity: 0.85;
+    vertical-align: -2px;
+    stroke: var(--primary);
 }
 
-@keyframes petalFall {
-    0% {
-        transform: translateY(-20px) rotate(0deg) translateX(0px);
-        opacity: 0.9;
-    }
-
-    30% {
-        transform: translateY(25%) rotate(100deg) translateX(18px);
-        opacity: 0.85;
-    }
-
-    60% {
-        transform: translateY(60%) rotate(210deg) translateX(-12px);
-        opacity: 0.7;
-    }
-
-    100% {
-        transform: translateY(115%) rotate(340deg) translateX(8px);
-        opacity: 0;
-    }
-}
-
-/* Legacy confetti-fall alias */
-@keyframes confetti-fall {
-    0% {
-        transform: translateY(-100px) rotate(0deg) translateX(0);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(300px) rotate(720deg) translateX(20px);
-        opacity: 0;
-    }
-}
+/* --- Confetti removed (was buggy) --- */
 
 /* ==================== */
 /* === MyPage Style === */
@@ -1492,6 +1366,32 @@ textarea.error {
     color: var(--text);
     font-family: var(--font-serif);
     letter-spacing: 0.5px;
+}
+
+/* Auth Tabs */
+.auth-tabs {
+    display: flex;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    background: var(--bg);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.auth-tab.active {
+    background: var(--primary);
+    color: #fff;
 }
 
 .login-desc {
